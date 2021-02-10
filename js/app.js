@@ -1,9 +1,9 @@
-var csvdata = [];
-var index = -1;
 
-run_crypto("../crypto_major_assets.csv");
-addLegend();
-
+/*
+*Organizes the data in such a way that it is easy for the 
+*'quilt' method to read and work with. Accepts raw data
+*as formatted by the d3.CSV method, 
+*/
 
 function run_crypto(csvfile){
 	d3.selectAll("svg").remove();
@@ -23,18 +23,15 @@ function run_crypto(csvfile){
             return parsed;
 		}, 
 		function(data) {
-			d3.selectAll(".columnHeaders").remove(); //remove data before generating new
-		    console.log(data)
         	//set column headers
 			var columns = d3.select("#columnHeaders")
-			.append("table");
-			columns.attr("class","columnHeaders")
 			.append("tr")
-			.selectAll('td')
+			.selectAll('th')
 		  	.data(data["columns"])
 		  	.enter()
-		  	.append('td')
-		  	.attr("class","columnData")
+		  	.append('th')
+			  .attr("class","columnData")
+		  	.attr("scope","col")
 		  	.style("padding-left", function(d){
 				if(d=="YTD"){
 					return "3rem";
@@ -55,16 +52,14 @@ function run_crypto(csvfile){
 		},
         );
 
-    console.log(d3.select("#columnHeaders").data())
-
 	setTimeout(function(){
 	csvdata.shift();
 	var gridData = quilt(csvdata);
 
 	var grid = d3.select("#grid")
 		.append("svg")
-		.attr("width","1120px")
-		.attr("height","600px")
+		.attr("width","100%")
+		.attr("height","100%")
 		.attr("viewBox", "0 0 920 579");
 
 		
@@ -328,3 +323,10 @@ function addLegend(){
     
     document.getElementById('averages').appendChild(ul);
 }
+
+var csvdata = [];
+
+var index = -1;
+
+run_crypto("../crypto_major_assets.csv");
+addLegend();

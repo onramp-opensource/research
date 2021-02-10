@@ -63,6 +63,7 @@ function isort(values) { //sort data in each column
   }
 };
 
+/*
 document.getElementById("stockprice").onclick = function(){ //generate stockprice chart 
 	$("#heading").text("Stock Price Return");
 	clear('bottomTable');
@@ -74,6 +75,7 @@ document.getElementById("divgrowth").onclick = function(){ //generate dividend g
 	clear('bottomTable');
 	run("divgrowth.csv");
 };
+*/
 
 var csvdata = [];
 var index = -1;
@@ -130,8 +132,8 @@ function run(csvfile){
 
 	var grid = d3.select("#grid")
 		.append("svg")
-		.attr("width","1120px")
-		.attr("height","600px")
+		.attr("width","80%")
+		.attr("height","60%")
 		.attr("viewBox", "0 0 920 579");
 
 	d3.select(window).on("resize",function(){
@@ -361,4 +363,4 @@ function run(csvfile){
 	},300);
 }
 
-run("divgrowth.csv");
+// run("divgrowth.csv");

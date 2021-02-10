@@ -24,25 +24,15 @@
 }
 
 /* grid data */
-.columnData {
-  font-size: 14px;
-  font-family: helvetica;
-  border: none;
-  font-weight: bold;
-  text-decoration: none;
-  padding: 3.999px;
+.card {
+  padding: 15px;
 }
 
-.columnHeaders {
-  text-decoration: none;
-  min-width: 1125px;
-  padding-left:30px;
-  fill: white;
+#columnHeaders {
   border-collapse: collapse;
   text-align: center;
-  table-layout: fixed;
-  display: table-cell;
-}
+  font-size: 14px;
+} 
 
 .averages {
   fill: white;
@@ -68,19 +58,12 @@
   font-family:helvetica;
 }
 
-td {
-  border: 1px solid black;
-  text-align: center;
-  padding: 3.4px;
-  width: 55px;
-}
-
 @media only screen and (max-width:1144px) {
 /* CSS for screens that are 1144 pixels (phones, tablets, etc.) */
 .bottomTable{
   padding-left: 1.5%;
 }
-.columnHeaders{
+#columnHeaders{
   padding-left: 20px;
 }
 }
