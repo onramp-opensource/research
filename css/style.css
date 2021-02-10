@@ -1,0 +1,140 @@
+/* Move down content because we have a fixed navbar that is 3.5rem tall */
+
+.custom-bg {
+  background-color: rgba(19, 28, 79, 1) !important;
+}
+
+.logo-img {
+  width: 130px;
+  height: auto;
+}
+
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+
+/* grid data */
+.columnData {
+  font-size: 14px;
+  font-family: helvetica;
+  border: none;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 3.999px;
+}
+
+.columnHeaders {
+  text-decoration: none;
+  min-width: 1125px;
+  padding-left:30px;
+  fill: white;
+  border-collapse: collapse;
+  text-align: center;
+  table-layout: fixed;
+  display: table-cell;
+}
+
+.averages {
+  fill: white;
+  border-collapse: collapse;
+  text-align: center;
+  table-layout: inherit;  
+  display: table-cell;
+  font-size: 12px;
+  font-family: helvetica;
+  float:left;
+}
+
+.bottomTable{
+  min-width: 1120px; 
+  width:1120px; 
+  padding-left: 7%; 
+  fill:white; 
+  border-collapse: collapse; 
+  text-align:left; 
+  table-layout: inherit; 
+  display: table-cell; 
+  font-size:12px; 
+  font-family:helvetica;
+}
+
+td {
+  border: 1px solid black;
+  text-align: center;
+  padding: 3.4px;
+  width: 55px;
+}
+
+@media only screen and (max-width:1144px) {
+/* CSS for screens that are 1144 pixels (phones, tablets, etc.) */
+.bottomTable{
+  padding-left: 1.5%;
+}
+.columnHeaders{
+  padding-left: 20px;
+}
+}
+
+.tooltip {
+  display:inline-block;
+  position:relative;
+  border:1px solid #666;
+  text-align:left;
+  padding:0.5rem;
+}
+
+.tooltip .top {
+  min-width:200px;
+  max-width:400px;
+  top:-20px;
+  left:50%;
+  transform:translate(-30%,-100%);
+  padding:10px 20px;
+  color:#ffffff;
+  background-color:#009cdc;
+  font-weight:normal;
+  font-size:14px;
+  border-radius:8px;
+  position:absolute;
+  z-index:99999999;
+  box-sizing:border-box;
+  box-shadow:0 1px 8px rgba(0,0,0,0.5);
+  display:none;
+}
+
+
+.tooltip:hover .top {
+  display:block;
+}
+
+.tooltip .top i {
+  position:absolute;
+  top:100%;
+  left:30%;
+  margin-left:-15px;
+  width:30px;
+  height:15px;
+  overflow:hidden;
+}
+
+.tooltip .top i::after {
+  content:'';
+  position:absolute;
+  width:15px;
+  height:15px;
+  left:50%;
+  transform:translate(-50%,-50%) rotate(45deg);
+  background-color:#009cdc;
+  box-shadow:0 1px 8px rgba(0,0,0,0.5);
+}
+ 

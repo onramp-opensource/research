@@ -1,0 +1,330 @@
+var csvdata = [];
+var index = -1;
+
+run_crypto("../crypto_major_assets.csv");
+addLegend();
+
+
+function run_crypto(csvfile){
+	d3.selectAll("svg").remove();
+	d3.csv(csvfile,
+		function(data) { //formats the data into a numerical array
+            const parsed = [];
+			Object.values(data).forEach(
+            function(d, i){
+                if(i==0){ //first element is title beware of % in bitcoin title
+                    parsed.push(d);
+                }
+                else{
+                   //convert percent to float
+                    parsed.push(parseFloat(d));
+                }
+                })
+            return parsed;
+		}, 
+		function(data) {
+			d3.selectAll(".columnHeaders").remove(); //remove data before generating new
+		    console.log(data)
+        	//set column headers
+			var columns = d3.select("#columnHeaders")
+			.append("table");
+			columns.attr("class","columnHeaders")
+			.append("tr")
+			.selectAll('td')
+		  	.data(data["columns"])
+		  	.enter()
+		  	.append('td')
+		  	.attr("class","columnData")
+		  	.style("padding-left", function(d){
+				if(d=="YTD"){
+					return "3rem";
+				}
+			} )
+		    .text(function(d){ if(d=="Asset Class"){
+			return; 
+			    //don't add rectangle for asset class
+		    } return d; })
+		    //.attr("width",function(d){
+			//    if(d=="Asset Class"){
+			//    	return "0";
+			//    }
+			//    return "60px";})
+
+			csvdata = data;
+			csvdata = prepareData(csvdata);
+		},
+        );
+
+    console.log(d3.select("#columnHeaders").data())
+
+	setTimeout(function(){
+	csvdata.shift();
+	var gridData = quilt(csvdata);
+
+	var grid = d3.select("#grid")
+		.append("svg")
+		.attr("width","1120px")
+		.attr("height","600px")
+		.attr("viewBox", "0 0 920 579");
+
+		
+	var row = grid.selectAll(".row")
+		.data(gridData)
+		.enter().append("g")
+		.attr("class", "row");
+
+	var column = row.selectAll(".square")
+		.data(function(d) { return d; })
+		.enter().append("rect")
+		.attr("class","square")
+		.attr("x", function(d) {	//separate the last two columns from the rest
+			if(d.x > 661){     //originally 841 for 1200 by 700
+				d.x += 50;
+				return d.x; 
+			}
+			else{
+				return d.x;
+			}
+		})
+		.attr("y", function(d) { return d.y; })
+		.attr("width", function(d) { return d.width; })
+		.attr("height", function(d) { return d.height; })
+		.style("fill", function(d) { 
+							switch (d.label) {
+							    case "S&P 500":
+							        return "#ff99af";
+							    case "EAFE":
+							        return "#d6922c";
+							    case "EEM":
+							        return "#21600d";
+							    case "HFRX":
+							        return "#1a287f";
+							    case "Agg":
+							        return "#3d963f";
+							    case "Comm.":
+							    	return "#225059";
+							    case "BTC":
+							    	return "#000000";
+							    case "60/40":
+							    	return "#571172";
+							    case "1% BTC":
+							    	return "#575757";
+							    case "5% BTC":
+							    	return "#687172";
+							    case "RealEst.":
+							    	return "#884000";
+							}		
+						})
+		.style("stroke", "#fff");
+
+	d3.selectAll('rect').on("mouseover", function(d) { //highlight all squares of same color
+	    var undermouse = $(this).attr('style');
+	    d3.selectAll('rect').transition().style('opacity',function () {
+	        return ($(this).attr('style') === undermouse) ? 1.0 : 0.3;
+	    });
+	});
+
+	d3.selectAll('rect').on("mouseleave", function(d) { //clears effect
+		d3.selectAll('rect').transition().style('opacity',1.0);
+	});
+
+/*****************begin table stuff*****************/
+	d3.selectAll(".averages").remove();
+
+	var avgtable = d3.select("#averages")
+	.append("table")
+	.attr("class","averages");
+	
+
+	avgtable.append("tr") // best
+	.selectAll('td')
+	.data(["Best"])
+	.enter()
+	.append('td')
+	.attr("class","averageData")
+	.text(function(d) { return d; });
+
+	avgtable.append("tr") // worst
+	.selectAll('td')
+	.data(["Worst"])
+	.enter()
+	.append('td')
+	.attr("class","averageData")
+	.text(function(d) { return d; });
+
+	avgtable.append("tr") // average
+	.selectAll('td')
+	.data(["Average"])
+	.enter()
+	.append('td')
+	.attr("class","averageData")
+	.text(function(d) { return d; });
+
+	var avgtable1 = d3.select("#averages")
+	.append("table")
+	.attr("class","averages");
+
+	avgtable1.append("tr") // best
+	.selectAll('td')
+	.data(csvdata.filter(function(d, i) { return i <= 13; }))
+	.enter()
+	.append('td')
+	.attr("class","averageData")
+	.text(function(d) { return d[0][0] + "%"; });
+
+	avgtable1.append("tr") // worst
+	.selectAll('td')
+  	.data(csvdata.filter(function(d, i) { return i <= 13; }))
+  	.enter()
+  	.append('td')
+  	.attr("class","averageData")
+    .text(function(d) { return d[10][0] + "%"; });
+
+    avgtable1.append("tr") // average
+    .selectAll('td')
+    .data(csvdata.filter(function(d, i) { return i <= 13; }))
+    .enter()
+    .append('td')
+    .attr("class","averageData")
+    .text(function(d){ 
+    	var sum = 0;
+    		for(var i = 0; i < d.length; i++){
+    			sum += d[i][0];
+    		}
+    		return Math.round((sum/11) * 100)/100 + "%";
+
+    	});
+
+    var avgtable2 = d3.select("#averages")
+    .append("table")
+    .attr("class", "averages")
+    .style("margin-left", 18)
+    .style("margin-right", 0)
+    //.style("padding-left",20);
+
+
+    avgtable2.append("tr") // best
+    .selectAll('td')
+    .data(csvdata.filter(function(d, i) { return i > 13; }))
+    .enter()
+    .append('td')
+    .attr("class", "averageData")
+    .style("margin-left", 50)
+    .text(function(d){return d[0][0] + "%";});
+
+    avgtable2.append("tr") //worst
+    .selectAll('td')
+    .data(csvdata.filter(function(d, i) { return i > 13; }))
+    .enter()
+    .append('td')
+    .attr("class", "averageData")
+    .style("margin-left", 0)
+    .text(function(d){return d[10][0] + "%";});
+
+    avgtable2.append("tr") //average
+    .selectAll('td')
+    .data(csvdata.filter(function(d, i) { return i > 13; }))
+    .enter()
+    .append('td')
+    .attr("class", "averageData")
+    .style("margin-left", 0)
+    .text(function(d){ 
+    	var sum = 0;
+    		for(var i = 0; i < d.length; i++){
+    			sum += d[i][0];
+    		}
+    		return Math.round((sum/11) * 100)/100 + "%";
+
+    	});
+
+/*****************end table stuff*****************/
+
+	var text = row.selectAll(".text") //grid labels
+		.data(function(d) { return d; })
+		.enter()
+		.append("text")
+		.style("fill", function(d) { 
+			//if (d.label == "S&P 500"){
+			//	return "rgb(67, 73, 84)";
+			//}
+			//else{
+				return "white";
+			//}
+		})
+		.style("font-family", "helvetica")
+		.attr("text-anchor", "middle")
+		.attr("font-size", 11)
+		.attr("x", function(d) { return d.x + 30; } )
+		.attr("y", function(d) { return d.y + 20;} ) 
+		.attr("pointer-events","none")
+		.text(function(d) { return d.label; } );
+
+	row.selectAll(".text") //grid values
+		.data(function(d) { return d; })
+		.enter()
+		.append("text")
+		.style("fill", function(d) { 
+			//if (d.label == "S&P 500"){
+			//	return "rgb(67, 73, 84)";
+			//}
+			//else{
+				return "white";
+			//}
+		})
+		.style("font-family", "helvetica")
+		.attr("text-anchor", "middle")
+		.attr("font-size", 11)
+		.attr("x", function(d) { return d.x + 30; } )
+		.attr("y", function(d) { return d.y + 35; } ) 
+		.attr("pointer-events","none")
+		.text(function(d) { return d.value + "%"; } );
+	},300);
+}
+
+function addLegend(){
+    if (document.getElementById('cryptolegend')) {
+        return;
+    };//element already exists, dont create again
+
+    var ul = document.createElement('ul');
+    ul.id = "cryptolegend";
+    ul.style.paddingLeft = 0;    
+
+    ul.innerHTML= `
+        <li class="tooltip">1% BTC 
+            <span class="top">59% S&P 500<br>40% Barclays Agg., 1% Bitcoin</span>
+       </li>
+       <li class="tooltip">5% BTC
+            <span class="top">55% S&P 500<br>40% Barclays Agg., 5% Bitcoin</span>
+       </li>
+       <li class="tooltip">BTC
+            <span class="top">Bitcoin Cryptocurrency</span>
+       </li>
+       <li class="tooltip">Comm.
+            <span class="top">Commodities: BCOMTR Index</span>
+        </li>
+        <li class="tooltip">S&P 500
+            <span class="top">Standard & Poor 500 Index</span>
+        </li>
+        <li class="tooltip">RealEst.
+            <span class="top">Real Estate: DJUSRET Index</span>
+        </li>
+        <li class="tooltip">60/40
+            <span class="top">60% S&P 500<br>40% Barclays Aggregate</span>
+        </li>
+        <li class="tooltip">Agg
+            <span class="top">Barclays Aggregate Index</span>
+        </li>
+        <li class="tooltip">HFRX
+            <span class="top">HFRXGL Index</span>
+        </li>
+        <li class="tooltip">EAFE
+            <span class="top">Non-North American developed markets (MSCI EAFE)<br> NDDUEAFE Index</span>
+        </li>
+        <li class="tooltip">EEM
+            <span class="top">Emerging Markets: NDUEEGF Index</span>
+        </li>
+     `;
+    
+    document.getElementById('averages').appendChild(ul);
+}
