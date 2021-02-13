@@ -34,30 +34,6 @@
   font-size: 14px;
 } 
 
-.averages {
-  fill: white;
-  border-collapse: collapse;
-  text-align: center;
-  table-layout: inherit;  
-  display: table-cell;
-  font-size: 12px;
-  font-family: helvetica;
-  float:left;
-}
-
-.bottomTable{
-  min-width: 1120px; 
-  width:1120px; 
-  padding-left: 7%; 
-  fill:white; 
-  border-collapse: collapse; 
-  text-align:left; 
-  table-layout: inherit; 
-  display: table-cell; 
-  font-size:12px; 
-  font-family:helvetica;
-}
-
 @media only screen and (max-width:1144px) {
 /* CSS for screens that are 1144 pixels (phones, tablets, etc.) */
 .bottomTable{

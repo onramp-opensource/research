@@ -87,27 +87,27 @@ function run_crypto(csvfile){
 		.style("fill", function(d) { 
 							switch (d.label) {
 							    case "S&P 500":
-							        return "#ff99af";
+							        return "#080808";
 							    case "EAFE":
-							        return "#d6922c";
+							        return "#595959";
 							    case "EEM":
-							        return "#21600d";
+							        return "#D9D9D9";
 							    case "HFRX":
-							        return "#1a287f";
+							        return "#cfda0e";
 							    case "Agg":
-							        return "#3d963f";
+							        return "#66ECFF";
 							    case "Comm.":
-							    	return "#225059";
+							    	return "#FF9999";
 							    case "BTC":
-							    	return "#000000";
+							    	return "#FFC000";
 							    case "60/40":
-							    	return "#571172";
+							    	return "#079A88";
 							    case "1% BTC":
 							    	return "#575757";
 							    case "5% BTC":
 							    	return "#687172";
 							    case "RealEst.":
-							    	return "#884000";
+							    	return "#FF6161";
 							}		
 						})
 		.style("stroke", "#fff");
@@ -124,63 +124,36 @@ function run_crypto(csvfile){
 	});
 
 /*****************begin table stuff*****************/
-	d3.selectAll(".averages").remove();
-
-	var avgtable = d3.select("#averages")
-	.append("table")
-	.attr("class","averages");
-	
-
-	avgtable.append("tr") // best
-	.selectAll('td')
-	.data(["Best"])
-	.enter()
-	.append('td')
-	.attr("class","averageData")
-	.text(function(d) { return d; });
-
-	avgtable.append("tr") // worst
-	.selectAll('td')
-	.data(["Worst"])
-	.enter()
-	.append('td')
-	.attr("class","averageData")
-	.text(function(d) { return d; });
-
-	avgtable.append("tr") // average
-	.selectAll('td')
-	.data(["Average"])
-	.enter()
-	.append('td')
-	.attr("class","averageData")
-	.text(function(d) { return d; });
 
 	var avgtable1 = d3.select("#averages")
 	.append("table")
-	.attr("class","averages");
+	.classed("table", true)
+	.classed("table-bordered", true)
 
-	avgtable1.append("tr") // best
-	.selectAll('td')
+	// best
+	tr1 = avgtable1.append('tr')
+	tr1.append('th').attr('scope','row').text("Best")
+	tr1.selectAll('td')
 	.data(csvdata.filter(function(d, i) { return i <= 13; }))
 	.enter()
 	.append('td')
-	.attr("class","averageData")
 	.text(function(d) { return d[0][0] + "%"; });
 
-	avgtable1.append("tr") // worst
-	.selectAll('td')
+	// worst
+	tr2 = avgtable1.append("tr") 
+	tr2.append('th').attr('scope','row').text("Worst")
+	tr2.selectAll('td')
   	.data(csvdata.filter(function(d, i) { return i <= 13; }))
   	.enter()
   	.append('td')
-  	.attr("class","averageData")
     .text(function(d) { return d[10][0] + "%"; });
 
-    avgtable1.append("tr") // average
-    .selectAll('td')
+	tr3 = avgtable1.append("tr") // average
+	tr3.append('th').attr('scope','row').text("Average")
+	tr3.selectAll('td')
     .data(csvdata.filter(function(d, i) { return i <= 13; }))
     .enter()
     .append('td')
-    .attr("class","averageData")
     .text(function(d){ 
     	var sum = 0;
     		for(var i = 0; i < d.length; i++){
@@ -190,47 +163,6 @@ function run_crypto(csvfile){
 
     	});
 
-    var avgtable2 = d3.select("#averages")
-    .append("table")
-    .attr("class", "averages")
-    .style("margin-left", 18)
-    .style("margin-right", 0)
-    //.style("padding-left",20);
-
-
-    avgtable2.append("tr") // best
-    .selectAll('td')
-    .data(csvdata.filter(function(d, i) { return i > 13; }))
-    .enter()
-    .append('td')
-    .attr("class", "averageData")
-    .style("margin-left", 50)
-    .text(function(d){return d[0][0] + "%";});
-
-    avgtable2.append("tr") //worst
-    .selectAll('td')
-    .data(csvdata.filter(function(d, i) { return i > 13; }))
-    .enter()
-    .append('td')
-    .attr("class", "averageData")
-    .style("margin-left", 0)
-    .text(function(d){return d[10][0] + "%";});
-
-    avgtable2.append("tr") //average
-    .selectAll('td')
-    .data(csvdata.filter(function(d, i) { return i > 13; }))
-    .enter()
-    .append('td')
-    .attr("class", "averageData")
-    .style("margin-left", 0)
-    .text(function(d){ 
-    	var sum = 0;
-    		for(var i = 0; i < d.length; i++){
-    			sum += d[i][0];
-    		}
-    		return Math.round((sum/11) * 100)/100 + "%";
-
-    	});
 
 /*****************end table stuff*****************/
 
