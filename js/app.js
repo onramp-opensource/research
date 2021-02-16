@@ -103,9 +103,9 @@ function run_crypto(csvfile){
 							    case "60/40":
 							    	return "#079A88";
 							    case "1% BTC":
-							    	return "#575757";
+							    	return "#7AFFBD";
 							    case "5% BTC":
-							    	return "#687172";
+							    	return "#00FB7E";
 							    case "RealEst.":
 							    	return "#FF6161";
 							}		
