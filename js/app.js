@@ -128,7 +128,7 @@ function run_crypto(csvfile){
 	var avgtable1 = d3.select("#averages")
 	.append("table")
 	.classed("table", true)
-	.classed("table-bordered", true)
+	.classed("table-sm", true)
 
 	// best
 	tr1 = avgtable1.append('tr')
