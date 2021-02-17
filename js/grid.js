@@ -63,6 +63,7 @@ function isort(values) { //sort data in each column
   }
 };
 
+// We may want to use this to flip between the annual quilt chart and the monthly chart
 /*
 document.getElementById("stockprice").onclick = function(){ //generate stockprice chart 
 	$("#heading").text("Stock Price Return");
