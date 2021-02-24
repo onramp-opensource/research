@@ -11,56 +11,36 @@ function run_crypto(csvfile){
 		function(data) { //formats the data into a numerical array
             const parsed = [];
 			Object.values(data).forEach(
-            function(d, i){
-                if(i==0){ //first element is title beware of % in bitcoin title
-                    parsed.push(d);
-                }
-                else{
-                   //convert percent to float
-                    parsed.push(parseFloat(d));
-                }
-                })
+				function (d, i) {
+					if (i == 0) { //first element is title beware of % in bitcoin title
+						parsed.push(d);
+					}
+					else {
+						//convert percent to float
+						parsed.push(parseFloat(d));
+					}
+				})
             return parsed;
 		}, 
 		function(data) {
+			let col_names = data["columns"]
+			col_names.shift() // get rid of "Asset Class" column
         	//set column headers
-			var columns = d3.select("#columnHeaders")
-			.append("tr")
-			.selectAll('th')
-		  	.data(data["columns"])
-		  	.enter()
-		  	.append('th')
-			  .attr("class","columnData")
-		  	.attr("scope","col")
-		  	.style("padding-left", function(d){
-				if(d=="YTD"){
-					return "3rem";
-				}
-			} )
-		    .text(function(d){ if(d=="Asset Class"){
-			return; 
-			    //don't add rectangle for asset class
-		    } return d; })
-		    //.attr("width",function(d){
-			//    if(d=="Asset Class"){
-			//    	return "0";
-			//    }
-			//    return "60px";})
-
 			csvdata = data;
-			csvdata = prepareData(csvdata);
+			csvdata = prepareData(csvdata, col_names);
 		},
         );
 
 	setTimeout(function(){
-	csvdata.shift();
+	csvdata.shift(); // remove empty element
 	var gridData = quilt(csvdata);
+	console.log("gridDAta", gridData)
 
 	var grid = d3.select("#grid")
 		.append("svg")
 		.attr("width","100%")
 		.attr("height","100%")
-		.attr("viewBox", "0 0 920 579");
+		.attr("viewBox", "0 0 895 600");
 
 		
 	var row = grid.selectAll(".row")
@@ -108,6 +88,8 @@ function run_crypto(csvfile){
 							    	return "#00FB7E";
 							    case "RealEst.":
 							    	return "#FF6161";
+								default:
+									return "white" //labels at top
 							}		
 						})
 		.style("stroke", "#fff");
@@ -166,45 +148,43 @@ function run_crypto(csvfile){
 
 /*****************end table stuff*****************/
 
+     // labels for the quilt
 	var text = row.selectAll(".text") //grid labels
 		.data(function(d) { return d; })
 		.enter()
 		.append("text")
-		.style("fill", function(d) { 
-			//if (d.label == "S&P 500"){
-			//	return "rgb(67, 73, 84)";
-			//}
-			//else{
-				return "white";
-			//}
-		})
-		.style("font-family", "helvetica")
+		.style("fill", function(d) {
+			return d.value ? "white" : "black"
+		}) 
 		.attr("text-anchor", "middle")
 		.attr("font-size", 11)
+		.attr("font-weight", "bold")
 		.attr("x", function(d) { return d.x + 30; } )
 		.attr("y", function(d) { return d.y + 20;} ) 
 		.attr("pointer-events","none")
-		.text(function(d) { return d.label; } );
+		.html(function (d) {
+			// The only to add \n to an SVG text.
+			if (d.value) { return d.label } // if there's a value (not a table header) then return the normal label
+			let l = d.label.split(" ") // table header, split it so we can put the parts on different levels
+			var x = d3.select(this).attr("x"); // get the x position of the text
+			var y = d3.select(this).attr("dy"); // get the y position of the text
+			var t = "<tspan x=" + x + " dy=" + (+y + 15) + ">" + l[1] + "</tspan>";
+			return l[0] + t; // appending it to the html
+		  });
 
 	row.selectAll(".text") //grid values
 		.data(function(d) { return d; })
 		.enter()
 		.append("text")
-		.style("fill", function(d) { 
-			//if (d.label == "S&P 500"){
-			//	return "rgb(67, 73, 84)";
-			//}
-			//else{
-				return "white";
-			//}
-		})
-		.style("font-family", "helvetica")
+		.style("fill", "white")
 		.attr("text-anchor", "middle")
 		.attr("font-size", 11)
 		.attr("x", function(d) { return d.x + 30; } )
 		.attr("y", function(d) { return d.y + 35; } ) 
 		.attr("pointer-events","none")
-		.text(function(d) { return d.value + "%"; } );
+		.text(function(d) { 
+			return d.value ? d.value + "%" : "" ; 
+		} );
 	},300);
 }
 

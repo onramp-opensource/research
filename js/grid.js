@@ -33,7 +33,8 @@ function quilt(data, options) {
 *'quilt' method to read and work with. Accepts raw data
 *as formatted by the d3.CSV method, 
 */
-function prepareData(rawdata){
+function prepareData(rawdata, col_names){
+	console.log("raw", rawdata)
 	var prepared = [];
 	for (var year = 1; year < rawdata[0].length; year++) {
 		var q = [];
@@ -46,8 +47,13 @@ function prepareData(rawdata){
 		}
 		isort(q);
 		q.reverse(); //reverse sorted data so that highest value is on top row
+
+		let x = [null,col_names[year - 1]]
+		q.unshift(x)
+
 		prepared[year] = q;
 	}
+	console.log("prepaer", prepared)
 	return prepared;
 }
 
