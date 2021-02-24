@@ -119,7 +119,10 @@ function run_crypto(csvfile){
 	.data(csvdata.filter(function(d, i) { return i <= 13; }))
 	.enter()
 	.append('td')
-	.text(function(d) { return d[0][0] + "%"; });
+	.text(function(d) { 
+		console.log("d", d)
+		return d[1][0] + "%"; 
+	});
 
 	// worst
 	tr2 = avgtable1.append("tr") 
@@ -128,7 +131,7 @@ function run_crypto(csvfile){
   	.data(csvdata.filter(function(d, i) { return i <= 13; }))
   	.enter()
   	.append('td')
-    .text(function(d) { return d[10][0] + "%"; });
+    .text(function(d) { return d[11][0] + "%"; });
 
 	tr3 = avgtable1.append("tr") // average
 	tr3.append('th').attr('scope','row').text("Average")
@@ -138,7 +141,7 @@ function run_crypto(csvfile){
     .append('td')
     .text(function(d){ 
     	var sum = 0;
-    		for(var i = 0; i < d.length; i++){
+    		for(var i = 1; i < d.length; i++){
     			sum += d[i][0];
     		}
     		return Math.round((sum/11) * 100)/100 + "%";
