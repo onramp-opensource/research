@@ -23,6 +23,23 @@
   }
 }
 
+table {
+  width: 97% !important;
+  margin: auto;
+}
+table td {
+  font-size: 15px;
+  text-align: center;
+}
+
+.annual th, .annual td {
+  width: 7%;
+}
+
+button {
+  text-transform: uppercase;
+}
+
 /* grid data */
 .card {
   padding: 15px;
@@ -44,12 +61,30 @@
 }
 }
 
+#legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#cryptolegend {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 0px;
+}
+
 .tooltip {
   display:inline-block;
   position:relative;
   border:1px solid #666;
-  text-align:left;
+  text-align: center;
   padding:0.5rem;
+  opacity: 1;
+  margin: 4px;
+  border-radius: 10px;
+  width: 100%;
+  font-weight: 600;
 }
 
 .tooltip .top {
