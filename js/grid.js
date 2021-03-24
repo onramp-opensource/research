@@ -1,16 +1,18 @@
 $(function() {
-    run("crypto_major_assets_annual.csv", "annual");
 	addLegend();
+    run("crypto_major_assets_annual.csv", "annual");
 	$("#annual").on('click', () => {
 		run("crypto_major_assets_annual.csv", "annual");
 		clear('bottomtable');
-		// addLegend();
+		$("#annual").addClass("btn-active");
+		$("#monthly").removeClass("btn-active");
 	});
 
 	$("#monthly").on('click', () => {
 		run("crypto_major_assets.csv", "monthly");
 		clear('bottomtable');
-		// addLegend();
+		$("#monthly").addClass("btn-active");
+		$("#annual").removeClass("btn-active");
 	});
 });
 
@@ -191,7 +193,7 @@ function run(csvfile, key) {
 		d3.selectAll('rect').on("mouseover", function(d) { //highlight all squares of same color
 		    var undermouse = $(this).attr('style');
 		    d3.selectAll('rect').transition().style('opacity',function () {
-		        return ($(this).attr('style') === undermouse) ? 1.0 : 0.3;
+		        return ($(this).attr('style') === undermouse) ? 1.0 : 0.2;
 		    });
 		});
 
@@ -205,7 +207,6 @@ function run(csvfile, key) {
 			.append("table")
 			.classed("table", true)
 			.classed("table-sm", true)
-			.classed("annual", true)
 	    	// best
 			tr1 = avgtable1.append('tr')
 			tr1.append('th').attr('scope','row').text("Best")
@@ -250,7 +251,13 @@ function run(csvfile, key) {
 			.data(function(d) { return d; })
 			.enter()
 			.append("text")
-			.style("fill", function(d) { return d.value ? "white" : "black" })
+			.style("fill", function(d) {
+				if (d.label == "1% BTC" || d.label == "5% BTC") {
+					return "#838383";
+				} else {
+					return d.value ? "white" : "black" 
+				}
+			})
 			.attr("text-anchor", "middle")
 			.attr("font-size", 11)
 			.attr("font-weight", "bold")
@@ -295,14 +302,15 @@ function addLegend(){
         return;
     };//element already exists, dont create again
 
-    var ul = document.createElement('ul');
+    var ul = document.createElement('ul')
 
     ul.id = "cryptolegend";
+    ul.className = "list-group";
     ul.innerHTML= `
-        <li class="tooltip">1% BTC 
+        <li class="tooltip btc-color">1% BTC 
             <span class="top">59% S&P 500<br>40% Barclays Agg., 1% Bitcoin</span>
        </li>
-       <li class="tooltip">5% BTC
+       <li class="tooltip btc-color">5% BTC
             <span class="top">55% S&P 500<br>40% Barclays Agg., 5% Bitcoin</span>
        </li>
        <li class="tooltip">BTC
