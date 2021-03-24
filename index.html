@@ -55,9 +55,9 @@
 
   <main>
 
-    <section class="py-5 text-center container">
-      <div class="row py-lg-5">
-        <div class="col-lg-6 col-md-8 mx-auto">
+    <section class="mt-4 py-3 text-center container">
+      <div class="row py-lg-3">
+        <div class="col-lg-9 col-md-9 mx-auto">
           <h1 class="fw-light">Returns with Bitcoin</h1>
           <p class="lead text-muted">The following quiltchart highlights historical asset class returns along with those
             of a traditional 60/40 blended stock and bond portfolio. This chart is slightly different in that it
@@ -75,16 +75,26 @@
         
         <div class="row">
           <div class="col">
-            <div class="p-3" style="text-align: center;">
-              <button class="btn btn-primary btn-lg" id="annual" type="button">Annual</button>
-              <button class="btn btn-primary btn-lg mx-3" id="monthly" type="button">Monthly</button>
+            <div class="p-3" data-toggle="buttons" role="group" style="text-align: center;">
+              <button class="btn btn-rounded btn-lg mx-2 btn-active" id="annual" type="button">Annual</button>
+              <button class="btn btn-rounded btn-lg mx-2" id="monthly" type="button">Monthly</button>
             </div>
             <div class="card shadow-sm p-3">
-              <div class="row p-3">
-                <div class="col-md-1 p-0" id="legend"></div>
-                <div id="grid" class="col-md-11"></div>
+              <div class="row p-3 d-flex justify-content-between align-items-center">
+                <div class="d-flex" style="width: 10%"></div>
+                <div class="d-flex flex-lg-grow-1 flex-fill justify-content-start">
+                  <span class="title">Asset Class Returns</span>
+                </div>
+                
+                <img src="img/onramp_tm.png" class="tm-img">
               </div>
-              <div id="averages" class="bottomtable pt-3" style="display:inline-block;" ></div>
+              <div class="row px-3">
+                <div class="col-2 col-sm-3 col-md-1 px-2" id="legend">
+                  
+                </div>
+                <div id="grid" class="col-10 col-sm-9 col-md-11 p-0 px-2"></div>
+              </div>
+              <div id="averages" class="bottomtable pl-3 pt-3 table-responsive-lg"></div>
             </div>
           </div>
         </div>

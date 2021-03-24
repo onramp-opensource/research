@@ -23,10 +23,6 @@
   }
 }
 
-table {
-  width: 97% !important;
-  margin: auto;
-}
 table td {
   font-size: 15px;
   text-align: center;
@@ -34,10 +30,6 @@ table td {
 
 .annual th, .annual td {
   width: 7%;
-}
-
-button {
-  text-transform: uppercase;
 }
 
 /* grid data */
@@ -53,18 +45,36 @@ button {
 
 @media only screen and (max-width:1144px) {
 /* CSS for screens that are 1144 pixels (phones, tablets, etc.) */
-.bottomTable{
-  padding-left: 1.5%;
+  .bottomTable{
+    padding-left: 1.5%;
+  }
+  #columnHeaders{
+    padding-left: 20px;
+  }
 }
-#columnHeaders{
-  padding-left: 20px;
+
+.btn {
+  background-color: #99eaff;
+  color: #000000;
 }
+
+.btn:hover {
+  color: #fff;
+  background-color: #404040;
+}
+
+.btn-active {
+  background: #404040;
+  color: #fff;
+  box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
 }
 
 #legend {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }
 
 #cryptolegend {
@@ -72,6 +82,12 @@ button {
   align-items: center;
   flex-direction: column;
   padding: 0px;
+}
+
+.title {
+  font-size: 35px;
+  font-weight: bolder;
+
 }
 
 .tooltip {
@@ -82,7 +98,7 @@ button {
   padding:0.5rem;
   opacity: 1;
   margin: 4px;
-  border-radius: 10px;
+  border-radius: 10px !important;
   width: 100%;
   font-weight: 600;
 }
@@ -131,4 +147,35 @@ button {
   background-color:#009cdc;
   box-shadow:0 1px 8px rgba(0,0,0,0.5);
 }
- 
+
+.tm-img {
+  width: 25%;
+}
+
+@media (min-width: 1200px) {
+  .tooltip {
+    padding: 0.5rem !important;
+    font-size: 15px !important; 
+  }
+}
+
+@media (min-width: 992px) {
+  .tooltip {
+    padding: 0.4rem;
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 301px) {
+  .tooltip {
+    padding: 0.2rem;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 300px) {
+  .tooltip {
+    padding: 0.1rem;
+    font-size: 10px;
+  }
+}
