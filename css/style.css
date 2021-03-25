@@ -85,7 +85,7 @@ table td {
 }
 
 .title {
-  font-size: 35px;
+  /*font-size: 10px;*/
   font-weight: bolder;
 
 }
@@ -157,12 +157,30 @@ table td {
     padding: 0.5rem !important;
     font-size: 15px !important; 
   }
+
+  .title {
+    font-size: 35px !important;
+  }
+
 }
 
 @media (min-width: 992px) {
   .tooltip {
     padding: 0.4rem;
     font-size: 14px;
+  }
+
+  .title {
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 767px) {
+  .title {
+    font-size: 15px;
+  }
+  .grid {
+    height: 350px;
   }
 }
 
@@ -176,6 +194,10 @@ table td {
 @media (max-width: 300px) {
   .tooltip {
     padding: 0.1rem;
+    font-size: 10px;
+  }
+
+  .title {
     font-size: 10px;
   }
 }

@@ -131,6 +131,7 @@ function run(csvfile, key) {
 			.append("svg")
 			.attr("width","100%")
 			.attr("height","100%")
+			.attr("class", "grid");
 
 		if (key == "monthly") {
 			grid.attr("viewBox", "0 0 850 600");
@@ -142,7 +143,6 @@ function run(csvfile, key) {
 			.data(gridData)
 			.enter().append("g")
 			.attr("class", "row");
-
 		var column = row.selectAll(".square")
 			.data(function(d) { return d; })
 			.enter().append("rect")
@@ -203,10 +203,11 @@ function run(csvfile, key) {
 		/*****************begin table stuff*****************/
 		d3.selectAll(".averages").remove();
 
-		var avgtable1 = d3.select("#averages")
+		/*var avgtable1 = d3.select("#averages")
 			.append("table")
 			.classed("table", true)
-			.classed("table-sm", true)
+			.classed("table-sm", true);
+			
 	    	// best
 			tr1 = avgtable1.append('tr')
 			tr1.append('th').attr('scope','row').text("Best")
@@ -242,7 +243,90 @@ function run(csvfile, key) {
 			    		return Math.round((sum/11) * 100)/100 + "%";
 
 			    	}
-			    );
+			    );*/
+		summLabels = ["Best", "Worst", "Average"];
+		var svg = d3.select("#averages")
+			.append("svg")
+			.attr("width","100%")
+			.attr("height","100%")
+
+		if (key == "monthly") {
+			svg.attr("viewBox", "0 0 920 150");
+		} else {
+			svg.attr("viewBox", "0 0 800 150");
+		}
+
+		row1 = svg.append('g')
+			.attr("class", "row")
+			.attr("transform", "translate(100, 50)")	
+
+		row1.selectAll(".text") //Best values
+			.data(gridData[1])
+			.enter()
+			.append("text")
+			.style("fill", "black")
+			.attr("text-anchor", "middle")
+			.attr("font-size", 13)
+			.attr("x", function(d) { return d.x; } )
+			.attr("y", 0 ) 
+			.attr("pointer-events","none")
+			.text(function(d) { 
+				return d.value ? d.value + "%" : "" ; 
+			});
+
+		row1.selectAll(".text") //Worst values
+			.data(gridData[11])
+			.enter()
+			.append("text")
+			.style("fill", "black")
+			.attr("text-anchor", "middle")
+			.attr("font-size", 13)
+			.attr("x", function(d) { return d.x; } )
+			.attr("y", 0 ) 
+			.attr("pointer-events","none")
+			.text(function(d) { 
+				return d.value ? d.value + "%" : "" ; 
+			})
+			.attr("transform", "translate(0, 30)");
+
+		var row2 = svg.append("g")
+			.attr("class", "row")
+			.attr("transform", "translate(100, 110)");
+
+		row2.selectAll("text") // Average values
+			.data(csvdata.filter(function(d, i) { return i < length - 1; }))
+			.enter()
+			.append('text')
+			.text(function(d){ 
+		    	var sum = 0;
+		    		for(var i = 1; i < d.length; i++){
+		    			sum += d[i][0];
+		    		}
+		    		return Math.round((sum/11) * 100)/100 + "%";
+		    	}
+		    )
+		    .style("fill", "black")
+			.attr("text-anchor", "middle")
+			.attr("font-size", 13)
+			.attr("x", function(d, i) { 
+				console.log(i)
+				return i === length - 2 ? i * 60 + 11 : i * 60 + 1;
+			})
+			.attr("y", 0 ) 
+			.attr("pointer-events","none");
+
+		var summaryLabels = svg.selectAll(".label")
+			.data(summLabels)
+			.enter().append("text")
+			.text(function(d) { return d; })
+			.attr("x", 0)
+			.attr("y", function(d, i) { return i * 30})
+			.attr("class", "label")
+			.style("text-anchor", "start")
+			.style("display", "block")
+			.style("font-weight", "bold")
+			.style("font-size", "12")
+			.attr("transform", "translate(5, 50)")
 
 		/*****************end table stuff*****************/
 
@@ -264,7 +348,6 @@ function run(csvfile, key) {
 			.attr("x", function(d) { return d.x + 30; } )
 			.attr("y", function(d) { return d.y + 20;} ) 
 			.attr("pointer-events","none")
-			// .text(function(d) { return d.label; } );
 		if (key == "monthly") {
 			text.html( function (d) 
 				{
