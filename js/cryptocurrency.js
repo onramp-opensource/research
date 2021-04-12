@@ -306,7 +306,6 @@ function getReturnData() {
 }
 
 $(document).ready(() => {
-	
 	var db = window.openDatabase('cryptodb', '1.0', 'Test DB', 2 * 1024 * 1024);
 	function appendMsgToDBLog(msg) {
         console.log(msg)
