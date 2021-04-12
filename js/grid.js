@@ -1,8 +1,10 @@
-$(function() {
+
+$(document).ready(() => {
 	addLegend();
     run("crypto_major_assets_annual.csv", "annual");
 	$("#annual").on('click', () => {
 		run("crypto_major_assets_annual.csv", "annual");
+		getReturnData();
 		clear('bottomtable');
 		$("#annual").addClass("btn-active");
 		$("#monthly").removeClass("btn-active");
@@ -10,11 +12,12 @@ $(function() {
 
 	$("#monthly").on('click', () => {
 		run("crypto_major_assets.csv", "monthly");
+		getReturnData();
 		clear('bottomtable');
 		$("#monthly").addClass("btn-active");
 		$("#annual").removeClass("btn-active");
 	});
-});
+})
 
 function quilt(data, options) {
 	var squares = new Array();
@@ -98,6 +101,9 @@ function clear(className) {
 }
 
 function run(csvfile, key) {
+	/*var date1 = new Date("2020-01-01");
+	console.log(date1.getTime());
+	alert(date1.getTime())*/
 	var length = 0;
 	d3.selectAll("svg").remove();
 	d3.csv(csvfile,
@@ -124,7 +130,7 @@ function run(csvfile, key) {
 		csvdata = prepareData(csvdata, col_names);
 	});
 
-	setTimeout( function() {
+	setTimeout(() => {
 		csvdata.shift();
 		var gridData = quilt(csvdata);
 		var grid = d3.select("#grid")
@@ -202,48 +208,7 @@ function run(csvfile, key) {
 		});
 		/*****************begin table stuff*****************/
 		d3.selectAll(".averages").remove();
-
-		/*var avgtable1 = d3.select("#averages")
-			.append("table")
-			.classed("table", true)
-			.classed("table-sm", true);
-			
-	    	// best
-			tr1 = avgtable1.append('tr')
-			tr1.append('th').attr('scope','row').text("Best")
-			tr1.selectAll('td')
-				.data(csvdata.filter(function(d, i) { return i < length - 1; }))
-				.enter()
-				.append('td')
-				.text(function(d) { 
-					console.log("d", d)
-					return d[1][0] + "%"; 
-				});
-
-			// worst
-			tr2 = avgtable1.append("tr") 
-			tr2.append('th').attr('scope','row').text("Worst")
-			tr2.selectAll('td')
-			   .data(csvdata.filter(function(d, i) { return i < length - 1; }))
-			   .enter()
-			   .append('td')
-			   .text(function(d) { return d[11][0] + "%"; });
-
-			tr3 = avgtable1.append("tr") // average
-			tr3.append('th').attr('scope','row').text("Average")
-			tr3.selectAll('td')
-			   .data(csvdata.filter(function(d, i) { return i < length - 1; }))
-			   .enter()
-			   .append('td')
-			   .text(function(d){ 
-			   		var sum = 0;
-			    		for(var i = 1; i < d.length; i++){
-			    			sum += d[i][0];
-			    		}
-			    		return Math.round((sum/11) * 100)/100 + "%";
-
-			    	}
-			    );*/
+		
 		summLabels = ["Best", "Worst", "Average"];
 		var svg = d3.select("#averages")
 			.append("svg")
@@ -377,29 +342,29 @@ function run(csvfile, key) {
 			.text(function(d) { 
 				return d.value ? d.value + "%" : "" ; 
 			});
-	}, 300);
+	}, 500);
 }
 
 function addLegend(){
-    if (document.getElementById('cryptolegend')) {
+    if (document.getElementById('assetlegend')) {
         return;
     };//element already exists, dont create again
 
     var ul = document.createElement('ul')
 
-    ul.id = "cryptolegend";
+    ul.id = "assetlegend";
     ul.className = "list-group";
     ul.innerHTML= `
         <li class="tooltip btc-color">1% BTC 
             <span class="top">59% S&P 500<br>40% Barclays Agg., 1% Bitcoin</span>
-       </li>
-       <li class="tooltip btc-color">5% BTC
+       	</li>
+       	<li class="tooltip btc-color">5% BTC
             <span class="top">55% S&P 500<br>40% Barclays Agg., 5% Bitcoin</span>
-       </li>
-       <li class="tooltip">BTC
+       	</li>
+       	<li class="tooltip">BTC
             <span class="top">Bitcoin Cryptocurrency</span>
-       </li>
-       <li class="tooltip">Comm.
+       	</li>
+       	<li class="tooltip">Comm.
             <span class="top">Commodities: BCOMTR Index</span>
         </li>
         <li class="tooltip">S&P 500
@@ -423,9 +388,6 @@ function addLegend(){
         <li class="tooltip">EEM
             <span class="top">Emerging Markets: NDUEEGF Index</span>
         </li>
-     `;
-    
-    document.getElementById('legend').appendChild(ul);
+    `;
+    $('#legend').append(ul);
 }
-
-
