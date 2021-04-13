@@ -1,6 +1,9 @@
-const monthData = ['2019-12', '2020-01', '2020-02', '2020-03', '2020-04', '2020-05', '2020-06', '2020-07', '2020-08', '2020-09', '2020-10', '2020-11', '2020-12' ]
-const START_DAY = 1575129600000; // 2019-01-01
-const END_DAY = 1609430399000; // 2020-12-31
+// @ts-nocheck
+const intervalYear = 24 * 3600 * 365 * 1000; // 1 year
+const intervalMonth = 24 * 3600 * 1000 * 30 // 1 month
+let date = new Date();
+const END_DATE = date.getTime(); // current Date
+const START_DATE = END_DATE - intervalYear
 function getReturnData() {
 	var finalData = []
 	var totalArray = [];
@@ -23,7 +26,7 @@ function getReturnData() {
 						selectedAsset.push(assetItem)
 					} 
 					else {
-						flag = 0;
+						var flag = 0;
 						for (var k = 0; k < selectedAsset.length; k++) {
 							if (assetItem.symbol == selectedAsset[k].symbol) {
 								flag = 1;
@@ -70,8 +73,8 @@ function getReturnData() {
 		returns.unshift(month);
 		returnGroup.push(returns);
 	}
-	lastmonths = itemGroup[itemGroup.length-1];
-	firstmonths = itemGroup[0]
+	const lastmonths = itemGroup[itemGroup.length-1];
+	const firstmonths = itemGroup[0]
 	for (var m = 0; m < lastmonths.length; m++) {
 		var annualItem = [];
 		for (var n = 0; n < firstmonths.length; n++) {
@@ -97,7 +100,6 @@ function getReturnData() {
 	returnGroup.push(annuals);
 
 	setTimeout(() => {
-		rawData.shift();
 		var gridData = quilt(returnGroup);
 		var grid = d3.select("#crypto")
 			.append("svg")
@@ -306,38 +308,43 @@ function getReturnData() {
 }
 
 $(document).ready(() => {
+	
+	for (let i = START_DATE; i < END_DATE; i+= intervalMonth) {
+		let date = new Date(i).toISOString().slice(0, 7);
+		monthData.push(date)
+	}
 	var db = window.openDatabase('cryptodb', '1.0', 'Test DB', 2 * 1024 * 1024);
 	function appendMsgToDBLog(msg) {
-        console.log(msg)
+			console.log(msg)
     }
 
 	function appendErrToDBLog(errMsg) {
-    	console.log(errMsg)
+		console.log(errMsg)
 	}
 
 	function appendWarningToDBLog(warning) {
-        console.log(warning)
+		console.log(warning)
     }
 
 	function standardSQLErrorHandler(tx, err) {
-	    if (err && err.message) {
-	        appendErrToDBLog("Error while manipulating database: " + err.message);
-	    } else {
-	        appendErrToDBLog("Encountered unexpected error while manipulating database.");
-	    }
+		if (err && err.message) {
+			appendErrToDBLog("Error while manipulating database: " + err.message);
+		} else {
+			appendErrToDBLog("Encountered unexpected error while manipulating database.");
+		}
 	}
 
-	function standardTxErrorHandler(err) {
-        if (err && err.message) {
-            appendErrToDBLog("Error while manipulating database: " + err.message);
-        } else {
-            appendErrToDBLog("Encountered unexpected error while manipulating database.");
-        }
-    }
+	function standardTxErrorHandler(err) {	
+		if (err && err.message) {
+			appendErrToDBLog("Error while manipulating database: " + err.message);
+		} else {
+			appendErrToDBLog("Encountered unexpected error while manipulating database.");
+		}
+	}
 
 	if (db) {
-        appendMsgToDBLog("It's alive!");
-    }
+		appendMsgToDBLog("It's alive!");
+	}
 
 	db.transaction(getDBData, standardTxErrorHandler, confirmDBData);
 
@@ -385,9 +392,9 @@ $(document).ready(() => {
 					tx.executeSql(
 					  	"SELECT h.price, strftime('%Y-%m', h.date) as yearmonth, a.name, a.symbol \
 					  	FROM history h INNER JOIN assets a ON h.assetId = a.assetId \
-						WHERE h.id IN (SELECT  MAX(id) FROM history WHERE assetId != 'tether' \
-						GROUP BY strftime('%Y-%m', date), assetId ORDER BY strftime('%Y-%m', date) ASC, price DESC) \
-					 	ORDER BY yearmonth ASC, h.price DESC", [], (tx,res) => {
+							WHERE h.id IN (SELECT  MAX(id) FROM history WHERE assetId != 'tether' \
+							GROUP BY strftime('%Y-%m', date), assetId ORDER BY strftime('%Y-%m', date) ASC, price DESC) \
+							ORDER BY yearmonth ASC, h.price DESC", [], (tx,res) => {
 						var len = res.rows.length;
 					    if (len ==0 ) {
 					    	// createHistoryData();
@@ -485,7 +492,8 @@ $(document).ready(() => {
 	}
 
 	function getAssetIdHisotry(id, rank) {
-		$.get('https://api.coincap.io/v2/assets/'+id+'/history', {interval:"d1", start: START_DAY, end: END_DAY})
+		
+		$.get('https://api.coincap.io/v2/assets/'+id+'/history', {interval:"d1", start: START_DATE, end: END_DATE})
 		.done(async (res) => {
 			await setHistoryData(id, res.data, rank)
 		});
@@ -521,10 +529,9 @@ function addCryptoLegend(){
 	    ul.innerHTML = childs;
 	    $('#crypto-legend').append(ul);
 	}, 500)
-    
 }
 
 var selectedAsset = [];
 var assetData = [];
 var historyData = [];
-var rawData = []
+var monthData = [];
