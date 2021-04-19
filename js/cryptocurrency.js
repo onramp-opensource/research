@@ -170,7 +170,9 @@ function getReturnData() {
 					    	return "#1AFCCE";
 					    case "EOS": 
 					    	return "#AF6161";
-                       default:
+					    case "NEO": 
+					    	return "#CF6060";
+                       	default:
 							return "white" //labels at top
 					}		
 				})
@@ -345,7 +347,7 @@ $(document).ready(() => {
 	if (db) {
 		appendMsgToDBLog("It's alive!");
 	}
-
+	db.transaction(recreateTable, standardSQLErrorHandler)
 	db.transaction(getDBData, standardTxErrorHandler, confirmDBData);
 
 	function getDBData(tx) {
@@ -456,7 +458,7 @@ $(document).ready(() => {
 				appendMsgToDBLog("Successfully cleaned up history.");
 			}, standardSQLErrorHandler);
 
-		db.transaction(createTable, standardTxErrorHandler, 
+		db.transaction(createHistoryTable, standardTxErrorHandler, 
         	function() {
             	appendMsgToDBLog("Successfully cleaned up database.");
         	}
