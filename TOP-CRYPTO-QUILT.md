@@ -37,4 +37,4 @@ Among them, we calculated and displayed the monthly rate of return according to 
             WHERE h.id IN (SELECT  MAX(id) FROM `history` WHERE assetId != 'tether' GROUP BY SUBSTRING(`date`, 1, 7), assetId 
             ORDER BY SUBSTRING(`date`, 1, 7) ASC, price DESC) ORDER BY yearmonth ASC, h.price DESC`
 * Calculating the Returns
-  > `(Closing price at the end of the month) / (closing price at the end of the previous month) [this is basically the opening price at the beginning of the month]  - 
+  > `(Closing price at the end of the month) / (closing price at the end of the previous month) [this is basically the opening price at the beginning of the month]  - 1`
