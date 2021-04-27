@@ -31,7 +31,7 @@ Among them, we calculated and displayed the monthly rate of return according to 
   
   > Stored in the History Table of the database
 ### 3. Displaying the Returns for each Cryptocurrency
-![image](https://user-images.githubusercontent.com/60430353/114468037-71133180-9c1d-11eb-9ce6-0ca791f92e4f.png)
+![image](https://user-images.githubusercontent.com/60430353/116264676-12b58980-a7ad-11eb-9603-80d5b601ab4d.png)
 * Pulling the data from the Database.
   > `SELECT h.price, SUBSTRING(h.date, 1, 7) as yearmonth, a.name, a.symbol FROM `history` h INNER JOIN assets a ON h.assetId = a.assetId
             WHERE h.id IN (SELECT  MAX(id) FROM `history` WHERE assetId != 'tether' GROUP BY SUBSTRING(`date`, 1, 7), assetId 
