@@ -1,3 +1,4 @@
+// @ts-nocheck
 
 $(document).ready(() => {
 	addLegend();
@@ -73,7 +74,6 @@ function prepareData(rawdata, col_names) {
 
 		prepared[year] = q;
 	}
-	console.log("prepaer", prepared)
 	return prepared;
 }
 
@@ -274,7 +274,6 @@ function run(csvfile, key) {
 			.attr("text-anchor", "middle")
 			.attr("font-size", 13)
 			.attr("x", function(d, i) { 
-				console.log(i)
 				return i === length - 2 ? i * 60 + 11 : i * 60 + 1;
 			})
 			.attr("y", 0 ) 
