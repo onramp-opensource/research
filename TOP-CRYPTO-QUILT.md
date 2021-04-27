@@ -5,8 +5,8 @@ To get all the price information of cryptocurrencies, we used the API provided b
 The information for each cryptocurrency used SQLite instead of a CSV file to store the price information for a year and fetched the data from the database and displayed it.
 Among them, we calculated and displayed the monthly rate of return according to the ranking of the cryptocurrencies with the highest prices.
 
-### 1. Creating databases and tables using SQLite. [(SQLite)](https://www.sqlitetutorial.net/)
-* Database title: "CryptoDB" (The database title can be changed.)
+### 1. Creating databases and tables using MySQL. [(MySQL)](https://www.mysql.com/)
+* Database title: "crypto" (The database title can be changed.)
 * Tables:
   - Assets Table
     > `id INTEGER PRIMARY KEY`,   
@@ -17,11 +17,9 @@ Among them, we calculated and displayed the monthly rate of return according to 
    
   - History Table
     > `id INTEGER PRIMARY KEY`,   
-    > `assetId TEXT NOT NULL`,  
-    > `time TEXT NOT NULL`,   
+    > `assetId TEXT NOT NULL`,    
     > `price REAL NOT NULL`,  
     > `date TEXT NOT NULL`,   
-    > `rank INTEGER NOT NULL`,
     
 ### 2. Getting the Asset and Historical data for 20 Cryptocurrencies. [(Coincap)](https://docs.coincap.io/)
 * Fetching information on the 20 cryptocurrencies with the highest price rankings.
@@ -35,10 +33,8 @@ Among them, we calculated and displayed the monthly rate of return according to 
 ### 3. Displaying the Returns for each Cryptocurrency
 ![image](https://user-images.githubusercontent.com/60430353/114468037-71133180-9c1d-11eb-9ce6-0ca791f92e4f.png)
 * Pulling the data from the Database.
-  > `SELECT h.price, strftime('%Y-%m', h.date) as yearmonth, a.name, a.symbol 
-		  FROM history h INNER JOIN assets a ON h.assetId = a.assetId 
-			WHERE h.id IN (SELECT  MAX(id) FROM history WHERE assetId != 'tether'
-			GROUP BY strftime('%Y-%m', date), assetId ORDER BY strftime('%Y-%m', date) ASC, price DESC) 
-		 	ORDER BY yearmonth ASC, h.price DESC`
+  > `SELECT h.price, SUBSTRING(h.date, 1, 7) as yearmonth, a.name, a.symbol FROM `history` h INNER JOIN assets a ON h.assetId = a.assetId
+            WHERE h.id IN (SELECT  MAX(id) FROM `history` WHERE assetId != 'tether' GROUP BY SUBSTRING(`date`, 1, 7), assetId 
+            ORDER BY SUBSTRING(`date`, 1, 7) ASC, price DESC) ORDER BY yearmonth ASC, h.price DESC`
 * Calculating the Returns
   > `(Closing price at the end of the month) / (closing price at the end of the previous month) [this is basically the opening price at the beginning of the month]  - 
