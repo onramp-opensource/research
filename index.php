@@ -98,6 +98,7 @@
               <!-- <div id="averages" class="bottomtable px-2 pt-3 row"></div> -->
             </div>
             <div class="card shadow-sm p-3 mt-4">
+              <div id="loader"></div>
               <div class="row p-3 d-flex justify-content-between align-items-center">
                 <div class="d-flex col-2 col-sm-3 col-md-1 "></div>
                 <div class="d-flex flex-lg-grow-1 flex-fill justify-content-start pl-2">
@@ -118,7 +119,7 @@
       </div>
     </div>
     <div id="status"></div>
-    <div class="sharethis-inline-share-buttons mt-4" data-url="http://sharethis.com" data-title="Sharing is great!"></div>
+    <div class="sharethis-inline-share-buttons mt-4" data-url="https://google.com" data-title="Sharing is great!"></div>
   </main>
   <footer class="text-muted py-5">
     <div class="container">
