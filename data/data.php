@@ -158,6 +158,5 @@
       getFirstLastData();
     }
   }
-  
   mysqli_close($conn);
 ?>

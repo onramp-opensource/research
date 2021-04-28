@@ -1,26 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <title>Onramp Research</title>
   <link rel='shortcut icon' type='image/png' href='img/onramp.png' />
-
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
   <link href="css/style.css" rel="stylesheet">
   <style>
-    
-
   </style>
-  <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=6079e2bd6e09c300115e62ba&product=sop' async='async'></script>
+  <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=6088919d7ab20d00182b64c8&product=sop' async='async'></script>
 </head>
-
 <body oncontextmenu="return false">
-
   <header>
     <div class="custom-bg collapse" id="navbarHeader">
       <div class="container">
@@ -53,9 +46,7 @@
       </div>
     </div>
   </header>
-
   <main>
-
     <section class="mt-4 py-3 text-center container">
       <div class="row py-lg-3">
         <div class="col-lg-9 col-md-9 mx-auto">
@@ -70,10 +61,8 @@
         </div>
       </div>
     </section>
-
     <div class="py-3 bg-light">
       <div class="container">
-        
         <div class="row">
           <div class="col">
             <div class="p-3" data-toggle="buttons" role="group" style="text-align: center;">
@@ -138,6 +127,5 @@
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="js/grid.js"></script>
   <script src="js/cryptocurrency.js"></script>
-  <!-- <script src="js/app.js"></script> -->
 </body>
 </html>

@@ -121,53 +121,57 @@ function getReturnData() {
 			.attr("width", function(d) { return d.width; })
 			.attr("height", function(d) { return d.height; })
 			.style("fill", 
-				function(d) { 
-					switch (d.label) {
-						case "BTC":
-							return "#080809";
-						case "ETH":
-							return "#595960";
-						case "BNB":
-							return "#66ECFF";
-						case "XRP":
-							return "#cfda0f";
-						case "DOT":
-							return "#FF6162";
-						case "ADA":
-							return "#66ED00";
-						case "UNI":
-							return "#D9D9DA";
-						case "LTC":
-							return "#FFC001";
-						case "LINK":
-							return "#079A89";
-						case "BCH":
-							return "#7AFFBE";
-						case "THETA":
-							return "#49596A";
-						case "XLM": 
-							return "#EF8889";
-						case "USDC": 
-							return "#29D9AA";
-						case "FIL": 
-							return "#cfda0f";
-						case "WBTC": 
-							return "#FF999A";
-						case "BTT": 
-							return "#66ECFE";
-						case "DOGE": 
-							return "#EE6162";
-						case "SOL": 
-							return "#1FC001";
-						case "LUNA": 
-							return "#1AFCCE";
-						case "EOS": 
-							return "#AF6161";
-						case "NEO": 
-							return "#CF6060";
-						default:
-							return "#e6dfdf" //labels at top
-					}		
+				function(d) {
+					if (d.value != null) {
+						switch (d.label) {
+							case "BTC":
+								return "#080809";
+							case "ETH":
+								return "#595960";
+							case "BNB":
+								return "#66ECFF";
+							case "XRP":
+								return "#cfda0f";
+							case "DOT":
+								return "#FF6162";
+							case "ADA":
+								return "#66ED00";
+							case "UNI":
+								return "#00FB7E";
+							case "LTC":
+								return "#FFC001";
+							case "LINK":
+								return "#079A89";
+							case "BCH":
+								return "#FF9999";
+							case "THETA":
+								return "#49596A";
+							case "XLM": 
+								return "#EF8889";
+							case "USDC": 
+								return "#29D9AA";
+							case "FIL": 
+								return "#cfda0f";
+							case "WBTC": 
+								return "#FF999A";
+							case "BTT": 
+								return "#66ECFE";
+							case "DOGE": 
+								return "#EE6162";
+							case "SOL": 
+								return "#1FC001";
+							case "LUNA": 
+								return "#1AFCCE";
+							case "EOS": 
+								return "#AF6161";
+							case "NEO": 
+								return "#CF6060";
+							default:
+								return "#cfda0e" //labels at top
+						}
+					} else {
+						return "white"
+					}
 				})
 			.style("stroke", "#fff");
 
