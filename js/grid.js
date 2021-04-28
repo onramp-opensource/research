@@ -168,30 +168,30 @@ function run(csvfile, key) {
 			.style("fill", 
 				function(d) { 
 					switch (d.label) {
-					    case "S&P 500":
-					        return "#080808";
-					    case "EAFE":
-					        return "#595959";
-					    case "EEM":
-					        return "#D9D9D9";
-					    case "HFRX":
-					        return "#cfda0e";
-					    case "RealEst.":
-					        return "#FF6161";
-					    case "Agg":
-					    	return "#66ECFF";
-					    case "Comm.":
-					    	return "#FF9999";
-					    case "BTC":
-					    	return "#FFC000";
-					    case "60/40":
-					    	return "#079A88";
-					    case "1% BTC":
-					    	return "#7AFFBD";
-	                    case "5% BTC":
-	                        return "#00FB7E";
-                       default:
-							return "white" //labels at top
+						case "S&P 500":
+							return "#080808";
+						case "EAFE":
+							return "#595959";
+						case "EEM":
+							return "#D9D9D9";
+						case "HFRX":
+							return "#cfda0e";
+						case "RealEst.":
+							return "#FF6161";
+						case "Agg":
+							return "#66ECFF";
+						case "Comm.":
+							return "#FF9999";
+						case "BTC":
+							return "#FFC000";
+						case "60/40":
+							return "#079A88";
+						case "1% BTC":
+							return "#7AFFBD";
+						case "5% BTC":
+							return "#00FB7E";
+						default:
+						return "white" //labels at top
 					}		
 				})
 			.style("stroke", "#fff");
