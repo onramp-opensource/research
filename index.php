@@ -86,7 +86,7 @@
               </div>
               <!-- <div id="averages" class="bottomtable px-2 pt-3 row"></div> -->
             </div>
-            <div class="card shadow-sm p-3 mt-4">
+            <div class="card shadow-sm p-3 mt-4" id="crypto-assets">
               <div id="loader"></div>
               <div class="row p-3 d-flex justify-content-between align-items-center">
                 <div class="d-flex col-2 col-sm-3 col-md-1 "></div>
@@ -108,7 +108,7 @@
       </div>
     </div>
     <div id="status"></div>
-    <div class="sharethis-inline-share-buttons mt-4" data-url="https://google.com" data-title="Sharing is great!"></div>
+    <div class="sharethis-inline-share-buttons mt-4" data-url="https://research.onrampinvest.com/#crypto-assets" data-title="Cryptocurrency Assets Returns"></div>
   </main>
   <footer class="text-muted py-5">
     <div class="container">
