@@ -2,7 +2,7 @@
 
 $(document).ready(() => {
 	addLegend();
-    run("crypto_major_assets_annual.csv", "annual");
+	run("crypto_major_assets_annual.csv", "annual");
 	$("#annual").on('click', () => {
 		run("crypto_major_assets_annual.csv", "annual");
 		getReturnData();
@@ -18,6 +18,23 @@ $(document).ready(() => {
 		$("#monthly").addClass("btn-active");
 		$("#annual").removeClass("btn-active");
 	});
+	/*setTimeout(()=> {
+		html2canvas(document.querySelector("#class-returns"), {
+			x:-100,
+			y:0,
+			width: 1600,
+			height: 1600,
+			backgroundColor: '#ffffff',
+			foreignObjectRendering: true,
+			canvas: null,
+			imageTimeout: 55000,
+		}).then(canvas => {
+			// document.body.appendChild(canvas);
+			var imageFullQuality = canvas.toDataURL();
+			$("#st-1").data("image", canvas.toDataURL()); //setter
+			// alert($("#st-1").data('image'));
+		});
+	}, 2000) */
 })
 
 function quilt(data, options) {
@@ -216,9 +233,9 @@ function run(csvfile, key) {
 			.attr("height","100%")
 
 		if (key == "monthly") {
-			svg.attr("viewBox", "0 0 920 150");
+			svg.attr("viewBox", "0 0 920 140");
 		} else {
-			svg.attr("viewBox", "0 0 800 150");
+			svg.attr("viewBox", "0 0 800 140");
 		}
 
 		row1 = svg.append('g')
@@ -341,6 +358,13 @@ function run(csvfile, key) {
 			.text(function(d) { 
 				return d.value ? d.value + "%" : "" ; 
 			});
+		// $("#class-returns").html2canvas({
+		// 	onrendered: function (e) {
+		// 		var a = $('#share-class').data('image');
+		// 		$("#share-class").data('image', e.toDataURL("image/png"));
+		// 	}
+    // })
+		
 	}, 500);
 }
 
