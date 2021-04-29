@@ -194,7 +194,7 @@ function getReturnData() {
 			.append("svg")
 			.attr("width","100%")
 			.attr("height","100%")
-			.attr("viewBox", "0 0 850 150");
+			.attr("viewBox", "0 0 850 120");
 
 		cryptorow1 = cryptosvg.append('g')
 			.attr("class", "row")
