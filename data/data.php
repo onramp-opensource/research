@@ -132,9 +132,10 @@
   function getFirstLastData() {
     global $conn;
     $data = array();
+    $cur_date = date('Y-m-d');
     $sql = "SELECT a.symbol, c.* FROM assets a INNER JOIN (SELECT h.*, b.lastprice, b.lastdate FROM `history` h 
       INNER JOIN (SELECT id AS lastid, `date` AS lastdate, price AS lastprice, assetId AS lastassetId FROM `history` 
-      WHERE DATE(SUBSTRING(`date`, 1, 10))=(CURDATE() - 1)) b ON h.assetId = b.lastassetId GROUP BY b.lastassetId) c ON a.assetId = c.assetId 
+      WHERE DATE(SUBSTRING(`date`, 1, 10))=(STR_TO_DATE('$cur_date', '%Y-%m-%d') - 1)) b ON h.assetId = b.lastassetId GROUP BY b.lastassetId) c ON a.assetId = c.assetId 
       ORDER BY c.lastprice DESC LIMIT 10";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
