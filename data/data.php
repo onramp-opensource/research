@@ -39,6 +39,7 @@
       `name` varchar(255) NOT NULL,
       `assetId` varchar(255) NOT NULL,
       `symbol` varchar(255) NOT NULL,
+      `update_date` datetime NOT NULL,
       PRIMARY KEY (`id`),
       UNIQUE KEY `assetId` (`assetId`)
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8";
@@ -68,12 +69,13 @@
   function saveAssetData() {
     global $conn;
     $assetData = getAssetData();
+    $date = date('Y-m-d H:i:s');
     for ($i=0; $i < count($assetData) ; $i++) {
       $name = $assetData[$i]['name'];
       $rank = $assetData[$i]['rank'];
       $assetId = $assetData[$i]['id'];
       $symbol = $assetData[$i]['symbol'];
-      $sql = "INSERT INTO assets (rank, symbol, name, assetId) VALUES ('$rank', '$symbol', '$name', '$assetId')";
+      $sql = "INSERT INTO assets (rank, symbol, name, assetId, update_date) VALUES ('$rank', '$symbol', '$name', '$assetId', '$date')";
       mysqli_query($conn, $sql);
     }
   }
@@ -147,12 +149,26 @@
   }
 
   if (isset($_GET['call'])) {
+    global $conn;
+    $old_date = "";
+    date_default_timezone_set('America/Los_Angeles');
+    $sql = "SELECT update_date FROM assets LIMIT 1;";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+      $row = mysqli_fetch_assoc($result);
+      $old_date = strtotime($row["update_date"]);
+    } else {
+      echo "0 results";
+    }
     $var = $_GET['call'];
     if ($var == 1) {
-      dropTable();
-      createTable();
-      saveAssetData();
-      fetchAssetHistory();
+      $cur_time = time();
+      if ($cur_time - $old_date > 60 * 60 * 4) {
+        dropTable();
+        createTable();
+        saveAssetData();
+        fetchAssetHistory();
+      }
       getHistoryData();
     } else {
       getFirstLastData();
