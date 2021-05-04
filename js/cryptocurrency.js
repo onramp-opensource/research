@@ -329,10 +329,11 @@ function getDBData() {
 
 $(document).ready(() => {
 	getDBData()
-	for (let i = START_DATE; i < END_DATE; i+= intervalMonth) {
+	for (let i = END_DATE ; i >= START_DATE; i-= intervalMonth) {
 		let date = new Date(i).toISOString().slice(0, 7);
 		monthData.push(date)
 	}
+	monthData.reverse();
 })
 
 function addCryptoLegend(){
