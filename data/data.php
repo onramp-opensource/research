@@ -55,7 +55,7 @@
   }
   
   function getAssetData() {
-    $url = 'https://api.coincap.io/v2/assets?limit=21';
+    $url = 'https://api.coincap.io/v2/assets?limit=20';
     $crl = curl_init();
     curl_setopt($crl, CURLOPT_URL, $url);
     curl_setopt($crl, CURLOPT_FRESH_CONNECT, true);
@@ -132,9 +132,10 @@
   function getFirstLastData() {
     global $conn;
     $data = array();
+    $cur_date = date('Y-m-d');
     $sql = "SELECT a.symbol, c.* FROM assets a INNER JOIN (SELECT h.*, b.lastprice, b.lastdate FROM `history` h 
       INNER JOIN (SELECT id AS lastid, `date` AS lastdate, price AS lastprice, assetId AS lastassetId FROM `history` 
-      WHERE DATE(SUBSTRING(`date`, 1, 10))=(CURDATE() - 1)) b ON h.assetId = b.lastassetId GROUP BY b.lastassetId) c ON a.assetId = c.assetId 
+      WHERE DATE(SUBSTRING(`date`, 1, 10))=(STR_TO_DATE('$cur_date', '%Y-%m-%d') - 1)) b ON h.assetId = b.lastassetId GROUP BY b.lastassetId) c ON a.assetId = c.assetId 
       ORDER BY c.lastprice DESC LIMIT 10";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
@@ -152,20 +153,22 @@
     global $conn;
     $old_date = "";
     date_default_timezone_set('America/Los_Angeles');
-    $sql = "SELECT update_date FROM assets LIMIT 1;";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result) > 0) {
-      $row = mysqli_fetch_assoc($result);
-      $old_date = strtotime($row["update_date"]);
-    } else {
-      echo "0 results";
-    }
+    
     $var = $_GET['call'];
     if ($var == 1) {
       $cur_time = time();
-      if ($cur_time - $old_date > 60 * 60 * 4) {
-        dropTable();
-        createTable();
+      $sql = "SELECT update_date FROM assets LIMIT 1;";
+      $result = mysqli_query($conn, $sql);
+      if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $old_date = strtotime($row["update_date"]);
+        if ($cur_time - $old_date > 60 * 60 * 0.2) {
+          dropTable();
+          createTable();
+          saveAssetData();
+          fetchAssetHistory();
+        }
+      } else {
         saveAssetData();
         fetchAssetHistory();
       }

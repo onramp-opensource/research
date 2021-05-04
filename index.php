@@ -16,7 +16,7 @@
     integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=6088919d7ab20d00182b64c8&product=sop' async='async'></script>
+  <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=6090212ab6b03300128ef222&product=sop' async='async'></script>
 </head>
 <body oncontextmenu="return false">
   <header>
