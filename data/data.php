@@ -162,7 +162,7 @@
       if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
         $old_date = strtotime($row["update_date"]);
-        if ($cur_time - $old_date > 60 * 60 * 0.2) {
+        if ($cur_time - $old_date > 60 * 60 * 4) {
           dropTable();
           createTable();
           saveAssetData();
