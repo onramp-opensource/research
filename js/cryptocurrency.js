@@ -56,7 +56,7 @@ function getReturnData() {
 			var item = [];
 			for (var k = 0; k < itemGroup[i - 1].length; k++) {
 				if (itemGroup[i - 1][k].symbol && items[j].symbol && itemGroup[i - 1][k].symbol == items[j].symbol) {
-					var str = items[j].price / itemGroup[i - 1][j].price - 1;
+					var str = items[j].price / itemGroup[i - 1][k].price - 1;
 					// var value = str.toString().match(/(-)*[0-9]*(.?[0-9]{1,4})/);
 					var value = (str * 100).toFixed(2);
 					item.push(parseFloat(value));
