@@ -48,8 +48,7 @@
       `assetId` varchar(255) NOT NULL,
       `date` datetime NOT NULL,
       `price` double(11,6) NOT NULL,
-      PRIMARY KEY (`id`),
-      KEY `assetId` (`assetId`)
+      PRIMARY KEY (`id`)
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8";
     mysqli_query($conn, $sql);
     mysqli_query($conn, $sql1);
@@ -76,7 +75,7 @@
       $rank = $assetData[$i]['rank'];
       $assetId = $assetData[$i]['id'];
       $symbol = $assetData[$i]['symbol'];
-      $sql = "INSERT INTO `assets` (`rank`, `symbol`, `name`, `assetId`, `update_date`) VALUES ('$rank', '$symbol', '$name', '$assetId', '$date')";
+      $sql = "INSERT INTO assets (rank, symbol, name, assetId, update_date) VALUES ('$rank', '$symbol', '$name', '$assetId', '$date')";
       mysqli_query($conn, $sql);
     }
   }
@@ -90,7 +89,7 @@
 
   function fetchAssetIdHistory($id) {
     $d1 = new Datetime();
-    $currentTime = $d1->format('U') * 1000 + 24 * 3600 * 1000;
+    $currentTime = $d1->format('U') * 1000;
     $firstDate = $currentTime - INTERVAL_YEAR;
     $endDate = $currentTime;
     $url = "https://api.coincap.io/v2/assets/$id/history?interval=d1&start=$firstDate&end=$endDate";
@@ -105,9 +104,9 @@
     $data = $rspData['data'];
     for( $i = 0; $i < count($data); $i++) {
       global $conn;
-      $date = date('Y-m-d h:i:s', strtotime($data[$i]['date']));
+      $date = $data[$i]['date'];
       $price = $data[$i]['priceUsd'];
-      $sql = "INSERT INTO `history` (`assetId`, `date`, `price`) VALUES ('$id', '$date', '$price')";
+      $sql = "INSERT INTO history (assetId, date, price) VALUES ('$id', '$date', '$price')";
       mysqli_query($conn, $sql);
     }
   }
@@ -152,12 +151,13 @@
 
   if (isset($_GET['call'])) {
     global $conn;
-    date_default_timezone_set('UTC');
     $old_date = "";
+    date_default_timezone_set('America/Los_Angeles');
+    
     $var = $_GET['call'];
     if ($var == 1) {
       $cur_time = time();
-      $sql = "SELECT `update_date` FROM `assets` LIMIT 1;";
+      $sql = "SELECT update_date FROM assets LIMIT 1;";
       $result = mysqli_query($conn, $sql);
       if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
@@ -169,10 +169,12 @@
           fetchAssetHistory();
         }
       } else {
+        var_dump($cur_time);
+
         saveAssetData();
         fetchAssetHistory();
       }
-     getHistoryData();
+      getHistoryData();
     } else {
       getFirstLastData();
     }
