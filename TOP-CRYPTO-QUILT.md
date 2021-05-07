@@ -30,11 +30,14 @@ Among them, we calculated and displayed the monthly rate of return according to 
   > API used: [Historical Data](https://docs.coincap.io/#61e708a8-8876-4fb2-a418-86f12f308978)
   
   > Stored in the History Table of the database
+  
+  #### ※ The data update interval is 4 hours.(It can be changed to any value you want.)
 ### 3. Displaying the Returns for each Cryptocurrency
-![image](https://user-images.githubusercontent.com/60430353/116264676-12b58980-a7ad-11eb-9603-80d5b601ab4d.png)
+![crypto](https://user-images.githubusercontent.com/60430353/117499674-24b5da00-afae-11eb-9827-b65c9fb4d580.png)
 * Pulling the data from the Database.
   > `SELECT h.price, SUBSTRING(h.date, 1, 7) as yearmonth, a.name, a.symbol FROM `history` h INNER JOIN assets a ON h.assetId = a.assetId
             WHERE h.id IN (SELECT  MAX(id) FROM `history` WHERE assetId != 'tether' GROUP BY SUBSTRING(`date`, 1, 7), assetId 
             ORDER BY SUBSTRING(`date`, 1, 7) ASC, price DESC) ORDER BY yearmonth ASC, h.price DESC`
 * Calculating the Returns
   > `(Closing price at the end of the month) / (closing price at the end of the previous month) [this is basically the opening price at the beginning of the month]  - 1`
+  ### ※ On the Onramp Research website, we have added the ability to share certain graphics via social media. [(Sharethis)](https://sharethis.com/)
