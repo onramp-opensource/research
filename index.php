@@ -104,6 +104,10 @@
                 <div class="col-2 col-sm-3 col-md-1 px-2" id="crypto-legend"></div>
                 <div id="crypto" class="col-10 col-sm-9 col-md-11 p-0 px-2"></div>
               </div>
+              <div class="pt-3 text-center">
+                <span>Data update date: </span>
+                <span id="update"></span>
+              </div>
               <div class="row px-3 justify-content-end">
                 <div id="crypto-averages" class="bottomtable col-11 col-sm-10 col-md-12 p-0 px-2"></div>
               </div>

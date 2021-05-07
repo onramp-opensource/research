@@ -1,10 +1,11 @@
 <?php
   define("INTERVAL_YEAR", 24 * 3600 * 365 * 1000);
   define("INTERVAL_MONTH", 24 * 3600 *30 * 1000 );
+  date_default_timezone_set('UTC');
   $servername = "localhost";
   $database = "crypto";
   $username = "root";
-  $password = "onramp1!";
+  $password = "";
   // Create connection
   $conn = mysqli_connect($servername, $username, $password, $database);
   // Check connection
@@ -150,31 +151,38 @@
     }
   }
 
+  $cur_time = time();
+  $sql = "SELECT `update_date` FROM `assets` LIMIT 1;";
+  $update_date = "";
+  $result = mysqli_query($conn, $sql);
+  if (mysqli_num_rows($result) > 0) {
+    $row = mysqli_fetch_assoc($result);
+    $update_date = $row["update_date"];
+    if ($cur_time - strtotime($row["update_date"]) > 60 * 60 * 4) {
+      dropTable();
+      createTable();
+      saveAssetData();
+      fetchAssetHistory();
+    }
+  } else {
+    saveAssetData();
+    fetchAssetHistory();
+    $sql = "SELECT `update_date` FROM `assets` LIMIT 1;";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $update_date = $row["update_date"];
+  }
+
   if (isset($_GET['call'])) {
-    global $conn;
-    date_default_timezone_set('UTC');
-    $old_date = "";
     $var = $_GET['call'];
     if ($var == 1) {
-      $cur_time = time();
-      $sql = "SELECT `update_date` FROM `assets` LIMIT 1;";
-      $result = mysqli_query($conn, $sql);
-      if (mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-        $old_date = strtotime($row["update_date"]);
-        if ($cur_time - $old_date > 60 * 60 * 4) {
-          dropTable();
-          createTable();
-          saveAssetData();
-          fetchAssetHistory();
-        }
-      } else {
-        saveAssetData();
-        fetchAssetHistory();
-      }
      getHistoryData();
-    } else {
+    } 
+    if ($var == 2) {
       getFirstLastData();
+    }
+    if ($var == 3) {
+      echo $update_date;
     }
   }
   mysqli_close($conn);

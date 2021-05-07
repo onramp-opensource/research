@@ -6,6 +6,7 @@ var assetData = [];
 var historyData = [];
 var monthData = [];
 var firstlastData = [];
+var update_date = "";
 let date = new Date();
 const END_DATE = date.getTime(); // current Date
 const START_DATE = END_DATE - intervalYear
@@ -321,6 +322,15 @@ function getDBData() {
 					getReturnData();
 					addCryptoLegend();
 					$("#loader").css("display", "none");
+				}
+			});
+			$.ajax({
+				url: "./data/data.php",
+				type: "get",
+				data: {"call": "3"},
+				success: function(msg) {
+					update_date = msg;
+					$("#update").text(update_date);
 				}
 			});
 		}
