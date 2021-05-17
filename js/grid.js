@@ -5,17 +5,17 @@ $(document).ready(() => {
 	run("crypto_major_assets_annual.csv", "annual");
 	$("#annual").on('click', () => {
 		run("crypto_major_assets_annual.csv", "annual");
-		getReturnData();
+		getReturnData('daily');
 		clear('bottomtable');
 		$("#annual").addClass("btn-active");
-		$("#monthly").removeClass("btn-active");
+		$("#asset-monthly").removeClass("btn-active");
 	});
 
-	$("#monthly").on('click', () => {
+	$("#asset-monthly").on('click', () => {
 		run("crypto_major_assets.csv", "monthly");
-		getReturnData();
+		getReturnData('daily');
 		clear('bottomtable');
-		$("#monthly").addClass("btn-active");
+		$("#asset-monthly").addClass("btn-active");
 		$("#annual").removeClass("btn-active");
 	});
 	/*setTimeout(()=> {
