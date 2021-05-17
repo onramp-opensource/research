@@ -468,7 +468,6 @@ $(document).ready(() => {
 	}
 	dayGroup.reverse();
 
-	for (let i = END_DATE - 13 * 7 )
 	$("#daily").on('click', () => {
 		clear("crypto-legend");
 		run("crypto_major_assets_annual.csv", "annual");
