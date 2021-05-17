@@ -245,3 +245,10 @@ table td {
   from{ bottom:-100px; opacity:0 } 
   to{ bottom:0; opacity:1 }
 }
+
+.hidden {
+  display: none !important;
+}
+.update-date span {
+  font-weight: bold;
+}

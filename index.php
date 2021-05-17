@@ -71,16 +71,16 @@
         <div class="row">
           <div class="col">
             <div class="card shadow-sm p-3" id="class-returns">
-              <div class="p-3" data-toggle="buttons" role="group" style="text-align: center;">
-                <button class="btn btn-rounded btn-lg mx-2 btn-active" id="annual" type="button">Annual</button>
-                <button class="btn btn-rounded btn-lg mx-2" id="monthly" type="button">Monthly</button>
-              </div>
               <div class="row p-3 d-flex justify-content-between align-items-center">
                 <div class="d-flex col-2 col-sm-3 col-md-1 "></div>
                 <div class="d-flex flex-lg-grow-1 flex-fill justify-content-start pl-2">
                   <span class="title">Asset Class Returns</span>
                 </div>
                 <img src="img/onramp_tm.png" class="tm-img">
+              </div>
+              <div class="p-3" data-toggle="buttons" role="group" style="text-align: center;">
+                <button class="btn btn-rounded btn-lg mx-2 btn-active" id="annual" type="button">Annual</button>
+                <button class="btn btn-rounded btn-lg mx-2" id="asset-monthly" type="button">Monthly</button>
               </div>
               <div class="row px-3">
                 <div class="col-2 col-sm-3 col-md-1 px-2" id="legend"></div>
@@ -92,7 +92,7 @@
               <div class="sharethis-inline-share-buttons mt-2" id="share-class" data-url="https://research.onrampinvest.com/#class-returns" data-title="Cryptocurrency Assets Returns" data-image="https://research.onrampinvest.com/img/asset-class-returns.png"></div>
             </div>
             <div class="card shadow-sm p-3 mt-4" id="crypto-assets">
-              <div id="loader"></div>
+              <div id="loader" class="my-5"></div>
               <div class="row p-3 d-flex justify-content-between align-items-center">
                 <div class="d-flex col-2 col-sm-3 col-md-1 "></div>
                 <div class="d-flex flex-lg-grow-1 flex-fill justify-content-start pl-2">
@@ -100,18 +100,23 @@
                 </div>
                 <img src="img/onramp_tm.png" class="tm-img">
               </div>
-              <div class="row px-3 mt-3">
-                <div class="col-2 col-sm-3 col-md-1 px-2" id="crypto-legend"></div>
-                <div id="crypto" class="col-10 col-sm-9 col-md-11 p-0 px-2"></div>
+              <div class="p-3" data-toggle="buttons" role="group" style="text-align: center;">
+                <button class="btn btn-rounded btn-lg mx-2 btn-active" id="daily" type="button">Daily</button>
+                <!-- <button class="btn btn-rounded btn-lg mx-2" id="weekly" type="button">Weekly</button> -->
+                <button class="btn btn-rounded btn-lg mx-2" id="crypto-monthly" type="button">Monthly</button>
               </div>
-              <div class="pt-3 text-center">
-                <span>Data update date: </span>
-                <span id="update"></span>
+              <div class="row px-3 mt-3">
+                <div class="col-2 col-sm-3 col-md-1 px-2 crypto-legend" id="crypto-legend"></div>
+                <div id="crypto" class="col-10 col-sm-9 col-md-11 p-0 px-2"></div>
               </div>
               <div class="row px-3 justify-content-end">
                 <div id="crypto-averages" class="bottomtable col-11 col-sm-10 col-md-12 p-0 px-2"></div>
               </div>
-              <div class="sharethis-inline-share-buttons mt-2" data-url="https://research.onrampinvest.com/#crypto-assets" data-title="Cryptocurrency Assets Returns" data-image="https://research.onrampinvest.com/img/crypto-returns.png"></div>
+              <div class="row update-date hidden justify-content-end mr-3 d-flex">
+                <span>Date as Of: </span>
+                <span id="update-date" class="pl-2"></span>
+              </div>
+              <div class="sharethis-inline-share-buttons mt-4" data-url="https://research.onrampinvest.com/#crypto-assets" data-title="Cryptocurrency Assets Returns" data-image="https://research.onrampinvest.com/img/crypto-returns.png"></div>
             </div>
           </div>
         </div>

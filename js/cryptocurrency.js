@@ -1,32 +1,66 @@
 // @ts-nocheck
 const intervalYear = 24 * 3600 * 365 * 1000; // 1 year
-const intervalMonth = 24 * 3600 * 1000 * 30 // 1 month
+const intervalMonth = 24 * 3600 * 30 * 1000;  // 1 month
+const intervalDay = 24 * 3600 * 1000; // 1 day
+const intervalWeek = 24 * 3600 * 7 * 1000;  // 1 week
+
 var selectedAsset = [];
 var assetData = [];
-var historyData = [];
-var monthData = [];
 var firstlastData = [];
 var update_date = "";
-let date = new Date();
+
+var monthlyData = [];
+var monthGroup = [];
+var monthlyfirstlastData = [];
+var weeklyData = [];
+var weekGroup = [];
+var weeklyfirstlastData = [];
+var dailyData = [];
+var dayGroup = [];
+var dailyfirstlastData = [];
+
+var date = new Date();
 const END_DATE = date.getTime(); // current Date
 const START_DATE = END_DATE - intervalYear
 
-function getReturnData() {
-	var itemGroup = [];
-	var annuals = []
-	for (var i = 0; i < monthData.length; i++) {
+function getRegularData(key) {
+	let itemGroup = [];
+	let annuals = [];
+	let groupData = [];
+	let groupLabel = [];
+	let firstlastData = [];
+	if (key == "monthly") {
+		groupData = monthlyData;
+		groupLabel = monthGroup;
+		firstlastData = monthlyfirstlastData;
+	}
+	if (key == "daily") {
+		groupData = dailyData;
+		groupLabel = dayGroup;
+		firstlastData = dailyfirstlastData;
+	}
+	if (key == "weekly") {
+		groupData = weeklyData;
+		groupLabel = weekGroup;
+		firstlastData = weeklyfirstlastData;
+	}
+	if(selectedAsset.length > 0) {
+		selectedAsset = [];
+	}
+	
+	for (var i = 0; i < groupLabel.length; i++) {
 		var item = [];
 		var count = 1;
-		for (var j = 0; j < historyData.length; j++) {
+		for (var j = 0; j < groupData.length; j++) {
 			var assetItem = {
 				name: '',
 				symbol: ''
 			}
-			assetItem.name = historyData[j].name,
-			assetItem.symbol = historyData[j].symbol
-			if (monthData[i] == historyData[j].yearmonth) {
+			assetItem.name = groupData[j].name,
+			assetItem.symbol = groupData[j].symbol
+			if (groupLabel[i] == groupData[j].yearmonth) {
 				if (count < 11) {
-					item.push(historyData[j]);
+					item.push(groupData[j]);
 					if (selectedAsset.length <= 1) {
 						selectedAsset.push(assetItem)
 					} 
@@ -48,7 +82,7 @@ function getReturnData() {
 		}
 		itemGroup.push(item);
 	}
-	var returnGroup = [];
+	let returnGroup = [];
 
 	for (var i = 1; i < itemGroup.length; i++) {
 		var returns = []
@@ -78,6 +112,7 @@ function getReturnData() {
 		returns.unshift(month);
 		returnGroup.push(returns);
 	}
+	
 	for (var m = 0; m < firstlastData.length; m++) {
 		var annualItem = [];
 		var str1 = firstlastData[m].lastprice / firstlastData[m].price - 1;
@@ -86,15 +121,24 @@ function getReturnData() {
 		annualItem.push(firstlastData[m].symbol);
 		annuals.push(annualItem)
 	}
-	
-	let annual = [null, 'Annual'];
+	let annual;
+	if (key == "monthly") {
+		annual = [null, 'Annual'];
+	} else {
+		annual = [null, 'Cummulative'];
+	}
 	isort(annuals);
 	annuals.reverse();
 	annuals.unshift(annual);
 	returnGroup.push(annuals);
+	return returnGroup;
+}
 
+function getReturnData(key) {
+	let rspData = getRegularData(key);
+	console.log(rspData);
 	setTimeout(() => {
-		var gridData = quilt(returnGroup);
+		var gridData = quilt(rspData);
 		var grid = d3.select("#crypto")
 			.append("svg")
 			.attr("width","100%")
@@ -235,7 +279,7 @@ function getReturnData() {
 			.attr("transform", "translate(90, 90)");
 
 		cryptorow2.selectAll("text") // Average values
-			.data(returnGroup.filter(function(d, i) { return i < returnGroup.length; }))
+			.data(rspData.filter(function(d, i) { return i < rspData.length; }))
 			.enter()
 			.append('text')
 			.text(function(d){ 
@@ -254,7 +298,7 @@ function getReturnData() {
 			.attr("text-anchor", "middle")
 			.attr("font-size", 11)
 			.attr("x", function(d, i) { 
-				return i === returnGroup.length - 1 ? i * 60 + 11 : i * 60 + 1;
+				return i === rspData.length - 1 ? i * 60 + 11 : i * 60 + 1;
 			})
 			.attr("y", 0 ) 
 			.attr("pointer-events","none");
@@ -288,7 +332,23 @@ function getReturnData() {
 			.attr("x", function(d) { return d.x + 30; } )
 			.attr("y", function(d) { return d.y + 20;} ) 
 			.attr("pointer-events","none")
-			text.text(function(d) { return d.label; } );
+			if (key == 'daily') {
+				text.html( function (d) 
+					{
+						// The only to add \n to an SVG text.
+						if (d.value !== null || d.label == "Cummulative") { return d.label } // if there's a value (not a table header) then return the normal label
+						let l = d.label.split("-") // table header, split it so we can put the parts on different levels
+						var x = d3.select(this).attr("x"); // get the x position of the text
+						var y = d3.select(this).attr("dy"); // get the y position of the text
+						var t = "<tspan x=" + x + " dy=" + (+y + 15) + ">" + l[1] + "-" + l[2] + "</tspan>";
+						return l[0] + "-" + t; // appending it to the html
+					}
+				);
+			} else if (key == 'weekly') {
+				
+			} else {
+				text.text(function(d) { return d.label; } );
+			}
 
 		row.selectAll(".text") //grid values
 			.data(function(d) { return d; })
@@ -311,26 +371,83 @@ function getDBData() {
 		url: "./data/data.php",
 		type: "get",
 		data: {"call": "1"},
-		success: function(msg) {
-			historyData = $.parseJSON(msg);
+		success: function(data) {
+			monthlyData = $.parseJSON(data);
+
+			var inProgress = 0;
+			var handleBefore = function() {
+				inProgress++;
+			};
+			var handleComplete = function() {
+				if (!--inProgress) {
+					getReturnData('daily');
+					addCryptoLegend();
+					$("#loader").css("display", "none");
+					$(".update-date").removeClass('hidden');
+					$("#update-date").text(update_date);
+				}
+			};
+
 			$.ajax({
+				beforeSend: handleBefore, 
 				url: "./data/data.php",
 				type: "get",
 				data: {"call": "2"},
-				success: function(msg) {
-					firstlastData = $.parseJSON(msg);
-					getReturnData();
-					addCryptoLegend();
-					$("#loader").css("display", "none");
+				success: function(data) {
+					monthlyfirstlastData = $.parseJSON(data);
+					handleComplete();
 				}
 			});
+
 			$.ajax({
+				beforeSend: handleBefore,
 				url: "./data/data.php",
 				type: "get",
 				data: {"call": "3"},
-				success: function(msg) {
-					update_date = msg;
-					$("#update").text(update_date);
+				success: function(data) {
+					update_date = data;
+					handleComplete();
+				}
+			});
+
+			$.ajax({
+				beforeSend: handleBefore,
+				url: "./data/data.php",
+				type: "get",
+				data: {"call": "4"},
+				success: function(data) {
+					dailyData = $.parseJSON(data);
+					handleComplete();
+				}
+			});
+			$.ajax({
+				beforeSend: handleBefore,
+				url: "./data/data.php",
+				type: "get",
+				data: {"call": "5"},
+				success: function(data) {
+					dailyfirstlastData = $.parseJSON(data);
+					handleComplete();
+				}
+			});
+			$.ajax({
+				beforeSend: handleBefore,
+				url: "./data/data.php",
+				type: "get",
+				data: {"call": "6"},
+				success: function(data) {
+					weeklyData = $.parseJSON(data);
+					handleComplete();
+				}
+			});
+			$.ajax({
+				beforeSend: handleBefore,
+				url: "./data/data.php",
+				type: "get",
+				data: {"call": "7"},
+				success: function(data) {
+					weeklyfirstlastData = $.parseJSON(data);
+					handleComplete();
 				}
 			});
 		}
@@ -338,19 +455,66 @@ function getDBData() {
 }
 
 $(document).ready(() => {
-	getDBData()
+	getDBData();
 	for (let i = END_DATE ; i >= START_DATE; i-= intervalMonth) {
-		let date = new Date(i).toISOString().slice(0, 7);
-		monthData.push(date)
+		let month = new Date(i).toISOString().slice(0, 7);
+		monthGroup.push(month);
 	}
-	monthData.reverse();
+	monthGroup.reverse();
+
+	for (let i = END_DATE - intervalDay; i >= END_DATE - 13 * intervalDay; i-=intervalDay) {
+		let date = new Date(i).toISOString().slice(0, 10);
+		dayGroup.push(date);
+	}
+	dayGroup.reverse();
+
+	for (let i = END_DATE - 13 * 7 )
+	$("#daily").on('click', () => {
+		clear("crypto-legend");
+		run("crypto_major_assets_annual.csv", "annual");
+		getReturnData('daily');
+		addCryptoLegend();
+		clear('bottomtable');
+		$("#daily").addClass("btn-active");
+		$("#crypto-monthly").removeClass("btn-active");
+		$("#weekly").removeClass("btn-active");
+	});
+
+	$("#crypto-monthly").on('click', () => {
+		clear("crypto-legend");
+		run("crypto_major_assets_annual.csv", "annual");
+		getReturnData('monthly');
+		addCryptoLegend();
+		clear('bottomtable');
+		$("#crypto-monthly").addClass("btn-active");
+		$("#daily").removeClass("btn-active");
+		$("#weekly").removeClass("btn-active");
+	});
+
+	$("#weekly").on('click', () => {
+		clear("crypto-legend");
+		run("crypto_major_assets_annual.csv", "annual");
+		getReturnData('weekly');
+		addCryptoLegend();
+		clear('bottomtable');
+		$("#weekly").addClass("btn-active");
+		$("#crypto-monthly").removeClass("btn-active");
+		$("#daily").removeClass("btn-active");
+	});
 })
 
-function addCryptoLegend(){
+function weekNumberForDate(date) {
+	var janOne = new Date(date.getFullYear(),0,1);
+	var _date = new Date(date.getFullYear(),date.getMonth(),date.getDate());
+	var yearDay = ((_date - janOne + 1) / 86400000);//60 * 60 * 24 * 1000
+	var day = janOne.getUTCDay();
+	if (day<4){yearDay+=day;}
+	var week = Math.ceil(yearDay/7);
+	return week;
+}
+
+function addCryptoLegend() {
 	setTimeout(()=>{
-		if (document.getElementById('cryptolegend')) {
-	        return;
-	    };//element already exists, dont create again
 	    var ul = document.createElement('ul')
 	    ul.id = "cryptolegend";
 	    ul.className = "list-group mt-4";

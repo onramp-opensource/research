@@ -5,7 +5,7 @@
   $servername = "localhost";
   $database = "crypto";
   $username = "root";
-  $password = "";
+  $password = "onramp1!";
   // Create connection
   $conn = mysqli_connect($servername, $username, $password, $database);
   // Check connection
@@ -113,12 +113,27 @@
     }
   }
   
-  function getHistoryData() {
+  function getHistoryData($key) {
     global $conn;
     $history = array();
-    $sql = "SELECT h.price, SUBSTRING(h.date, 1, 7) as yearmonth, a.name, a.symbol FROM `history` h INNER JOIN assets a ON h.assetId = a.assetId
-            WHERE h.id IN (SELECT  MAX(id) FROM `history` WHERE assetId != 'tether' GROUP BY SUBSTRING(`date`, 1, 7), assetId 
-            ORDER BY SUBSTRING(`date`, 1, 7) ASC, price DESC) ORDER BY yearmonth ASC, h.price DESC";
+    $cur_time = time();
+    if ($key == 1) {
+      $sql = "SELECT h.price, SUBSTRING(h.date, 1, 7) as yearmonth, a.name, a.symbol FROM `history` h INNER JOIN assets a ON h.assetId = a.assetId
+        WHERE h.id IN (SELECT  MAX(id) FROM `history` WHERE assetId != 'tether' GROUP BY SUBSTRING(`date`, 1, 7), assetId 
+        ORDER BY SUBSTRING(`date`, 1, 7) ASC, price DESC) ORDER BY yearmonth ASC, h.price DESC";
+    }
+    if ($key == 4) {
+      $sql = "SELECT h.price, SUBSTRING(h.date, 1, 10) as yearmonth, a.name, a.symbol FROM `history` h INNER JOIN assets a ON h.assetId = a.assetId
+        WHERE h.id IN (SELECT  MAX(id) FROM `history` WHERE assetId != 'tether' AND ($cur_time - 14 * 24 * 60 * 60) < UNIX_TIMESTAMP(`date`) 
+        GROUP BY SUBSTRING(`date`, 1, 10), assetId ORDER BY SUBSTRING(`date`, 1, 10) ASC, price DESC) ORDER BY yearmonth ASC, h.price DESC";
+    }
+    if ($key == 6) {
+      $sql = "SELECT h.price, SUBSTRING(h.date, 1, 10) AS yearmonth, FLOOR((DAYOFMONTH(h.date) - 1) / 7 +1) AS `week`, a.name, a.symbol 
+      FROM `history` h INNER JOIN assets a ON h.assetId = a.assetId WHERE h.id IN (SELECT  MAX(id) FROM `history` 
+      WHERE assetId != 'tether' AND (1621199711 - 13 * 7 * 24 * 60 * 60) < UNIX_TIMESTAMP(`date`) 
+      GROUP BY assetId, SUBSTRING(`date`, 1, 7), FLOOR((DAYOFMONTH(`date`) - 1) / 7 +1) 
+      ORDER BY SUBSTRING(`date`, 1, 10) ASC, price DESC) ORDER BY yearmonth ASC, h.price DESC";
+    }
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
       // output data of each row
@@ -131,14 +146,31 @@
     }
   }
 
-  function getFirstLastData() {
+  function getFirstLastData($key) {
     global $conn;
     $data = array();
     $cur_date = date('Y-m-d');
-    $sql = "SELECT a.symbol, c.* FROM assets a INNER JOIN (SELECT h.*, b.lastprice, b.lastdate FROM `history` h 
+    $cur_time = time();
+    if ($key == 2) {
+      $sql = "SELECT a.symbol, c.* FROM assets a INNER JOIN (SELECT h.*, b.lastprice, b.lastdate FROM `history` h 
       INNER JOIN (SELECT id AS lastid, `date` AS lastdate, price AS lastprice, assetId AS lastassetId FROM `history` 
-      WHERE DATE(SUBSTRING(`date`, 1, 10))=(STR_TO_DATE('$cur_date', '%Y-%m-%d') - 1)) b ON h.assetId = b.lastassetId GROUP BY b.lastassetId) c ON a.assetId = c.assetId 
-      ORDER BY c.lastprice DESC LIMIT 10";
+      WHERE DATE(SUBSTRING(`date`, 1, 10))=(STR_TO_DATE('$cur_date', '%Y-%m-%d') - 1)) b ON h.assetId = b.lastassetId 
+      GROUP BY b.lastassetId) c ON a.assetId = c.assetId ORDER BY c.lastprice DESC LIMIT 10";
+    }
+    if ($key == 5) {
+      $sql = "SELECT a.symbol, c.lastassetId, c.price, c.lastprice FROM assets a INNER JOIN (SELECT * FROM (SELECT * FROM `history` 
+      WHERE assetId != 'tether' AND ($cur_time - 13 * 24 * 60 * 60) <= UNIX_TIMESTAMP(`date`)) a 
+      INNER JOIN(SELECT id AS lastid, `date` AS lastdate, price AS lastprice, assetId AS lastassetId FROM `history` 
+      WHERE DATE(SUBSTRING(`date`, 1, 10))=(STR_TO_DATE('$cur_date', '%Y-%m-%d') - 1)) b ON a.assetId = b.lastassetId 
+      GROUP BY b.lastassetId) c ON a.assetId = c.assetId ORDER BY c.lastprice DESC LIMIT 10";
+    }
+    if ($key == 7) {
+      $sql = "SELECT a.symbol, c.lastassetId, c.price, c.lastprice FROM assets a INNER JOIN (SELECT * FROM (SELECT * FROM `history` 
+      WHERE assetId != 'tether' AND ($cur_time - 12 * 7 * 24 * 60 * 60) <= UNIX_TIMESTAMP(`date`)) a 
+      INNER JOIN(SELECT id AS lastid, `date` AS lastdate, price AS lastprice, assetId AS lastassetId FROM `history` 
+      WHERE DATE(SUBSTRING(`date`, 1, 10))=(STR_TO_DATE('$cur_date', '%Y-%m-%d') - 1)) b ON a.assetId = b.lastassetId 
+      GROUP BY b.lastassetId) c ON a.assetId = c.assetId ORDER BY c.lastprice DESC LIMIT 10";
+    }
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
       // output data of each row
@@ -151,38 +183,59 @@
     }
   }
 
-  $cur_time = time();
-  $sql = "SELECT `update_date` FROM `assets` LIMIT 1;";
-  $update_date = "";
-  $result = mysqli_query($conn, $sql);
-  if (mysqli_num_rows($result) > 0) {
-    $row = mysqli_fetch_assoc($result);
-    $update_date = $row["update_date"];
-    if ($cur_time - strtotime($row["update_date"]) > 60 * 60 * 4) {
-      dropTable();
-      createTable();
+  function getUpdateDate() {
+    global $conn;
+    $sql = "SELECT `update_date` FROM `assets` LIMIT 1;";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+      $row = mysqli_fetch_assoc($result);
+      return $row["update_date"];
+    } else {
+      return 0;
+    }
+  }
+
+  function confirmDatabase() {
+    $cur_time = time();
+    $update_date = getUpdateDate();
+    if ($update_date) {
+      if ($cur_time - strtotime($update_date) > 60 * 60 * 4) {
+        dropTable();
+        createTable();
+        saveAssetData();
+        fetchAssetHistory();
+      }
+    } else {
       saveAssetData();
       fetchAssetHistory();
     }
-  } else {
-    saveAssetData();
-    fetchAssetHistory();
-    $sql = "SELECT `update_date` FROM `assets` LIMIT 1;";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($result);
-    $update_date = $row["update_date"];
   }
 
   if (isset($_GET['call'])) {
     $var = $_GET['call'];
-    if ($var == 1) {
-     getHistoryData();
-    } 
-    if ($var == 2) {
-      getFirstLastData();
-    }
-    if ($var == 3) {
-      echo $update_date;
+    switch($var) {
+      case 1:
+        confirmDatabase();
+        getHistoryData($var);
+        return;
+      case 2: 
+        getFirstLastData($var);
+        return;
+      case 3: 
+        echo getUpdateDate();
+        return;
+      case 4: 
+        getHistoryData($var);
+        return;
+      case 5: 
+        getFirstLastData($var);
+        return;
+      case 6: 
+        getHistoryData($var);
+        return;
+      case 7:
+        getFirstLastData($var);
+        return;
     }
   }
   mysqli_close($conn);
