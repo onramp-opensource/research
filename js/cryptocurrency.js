@@ -56,9 +56,15 @@ function getRegularData(key) {
 				name: '',
 				symbol: ''
 			}
-			assetItem.name = groupData[j].name,
-			assetItem.symbol = groupData[j].symbol
-			if (groupLabel[i] == groupData[j].yearmonth) {
+			assetItem.name = groupData[j].name;
+			assetItem.symbol = groupData[j].symbol;
+			let label = '';
+			if (key == 'weekly') {
+				label = groupLabel[i].week;
+			} else {
+				label = groupLabel[i];
+			}
+			if (label == groupData[j].yearmonth) {
 				if (count < 11) {
 					item.push(groupData[j]);
 					if (selectedAsset.length <= 1) {
@@ -136,7 +142,6 @@ function getRegularData(key) {
 
 function getReturnData(key) {
 	let rspData = getRegularData(key);
-	console.log(rspData);
 	setTimeout(() => {
 		var gridData = quilt(rspData);
 		var grid = d3.select("#crypto")
@@ -212,10 +217,10 @@ function getReturnData(key) {
 							case "NEO": 
 								return "#CF6060";
 							default:
-								return "#cfda0e" //labels at top
+								return "#cfda0e"; //labels at top
 						}
 					} else {
-						return "white"
+						return "white";
 					}
 				})
 			.style("stroke", "#fff");
@@ -345,7 +350,17 @@ function getReturnData(key) {
 					}
 				);
 			} else if (key == 'weekly') {
-				
+				text.html( function (d) 
+					{
+						// The only to add \n to an SVG text.
+						if (d.value !== null || d.label == "Cummulative") { return d.label } // if there's a value (not a table header) then return the normal label
+						let l = d.label.split("~") // table header, split it so we can put the parts on different levels
+						var x = d3.select(this).attr("x"); // get the x position of the text
+						var y = d3.select(this).attr("dy"); // get the y position of the text
+						var t = "<tspan x=" + x + " dy=" + (+y + 15) + ">" + l[1] + "</tspan>";
+						return l[0] + "~" + t; // appending it to the html
+					}
+				);
 			} else {
 				text.text(function(d) { return d.label; } );
 			}
@@ -450,6 +465,16 @@ function getDBData() {
 					handleComplete();
 				}
 			});
+			$.ajax({
+				beforeSend: handleBefore,
+				url: "./data/data.php",
+				type: "get",
+				data: {"call": "8"},
+				success: function(data) {
+					weekGroup = $.parseJSON(data);
+					handleComplete();
+				}
+			});
 		}
 	});
 }
@@ -519,7 +544,7 @@ function addCryptoLegend() {
 	    ul.className = "list-group mt-4";
 	    var childs ="";
 	    for (var i = 0; i < selectedAsset.length; i++) {
-	    	childs += `<li class="tooltip btc-color">`+selectedAsset[i].symbol +` 
+	    	childs += `<li class="tooltip">`+selectedAsset[i].symbol +` 
 	            <span class="top">`+selectedAsset[i].name+`</span>
 	       	</li>`
 	    }

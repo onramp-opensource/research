@@ -72,19 +72,19 @@
           <div class="col">
             <div class="card shadow-sm p-3" id="class-returns">
               <div class="row p-3 d-flex justify-content-between align-items-center">
-                <div class="d-flex col-2 col-sm-3 col-md-1 "></div>
+                <div class="d-flex col-2 col-sm-3 col-md-1 hidden-item"></div>
                 <div class="d-flex flex-lg-grow-1 flex-fill justify-content-start pl-2">
                   <span class="title">Asset Class Returns</span>
                 </div>
                 <img src="img/onramp_tm.png" class="tm-img">
               </div>
-              <div class="p-3" data-toggle="buttons" role="group" style="text-align: center;">
+              <div class="p-2 d-flex justify-content-center btn-items" data-toggle="buttons" role="group" style="text-align: center;">
                 <button class="btn btn-rounded btn-lg mx-2 btn-active" id="annual" type="button">Annual</button>
                 <button class="btn btn-rounded btn-lg mx-2" id="asset-monthly" type="button">Monthly</button>
               </div>
-              <div class="row px-3">
-                <div class="col-2 col-sm-3 col-md-1 px-2" id="legend"></div>
-                <div id="grid" class="col-10 col-sm-9 col-md-11 p-0 px-2"></div>
+              <div class="return-group row px-3">
+                <div class="col-2 col-sm-2 col-md-1 px-2 legend" id="legend"></div>
+                <div id="grid" class="col-10 col-sm-10 col-md-11 p-0 px-2"></div>
               </div>
               <div class="row px-3 justify-content-end">
                 <div id="averages" class="bottomtable col-11 col-sm-10 col-md-12 p-0 px-2"></div>
@@ -94,20 +94,20 @@
             <div class="card shadow-sm p-3 mt-4" id="crypto-assets">
               <div id="loader" class="my-5"></div>
               <div class="row p-3 d-flex justify-content-between align-items-center">
-                <div class="d-flex col-2 col-sm-3 col-md-1 "></div>
+                <div class="d-flex col-2 col-sm-3 col-md-1 hidden-item"></div>
                 <div class="d-flex flex-lg-grow-1 flex-fill justify-content-start pl-2">
                   <span class="title">Cryptocurrency Returns</span>
                 </div>
                 <img src="img/onramp_tm.png" class="tm-img">
               </div>
-              <div class="p-3" data-toggle="buttons" role="group" style="text-align: center;">
+              <div class="p-2 d-flex justify-content-center btn-items" data-toggle="buttons" role="group" style="text-align: center;">
                 <button class="btn btn-rounded btn-lg mx-2 btn-active" id="daily" type="button">Daily</button>
-                <!-- <button class="btn btn-rounded btn-lg mx-2" id="weekly" type="button">Weekly</button> -->
+                <button class="btn btn-rounded btn-lg mx-2" id="weekly" type="button">Weekly</button>
                 <button class="btn btn-rounded btn-lg mx-2" id="crypto-monthly" type="button">Monthly</button>
               </div>
-              <div class="row px-3 mt-3">
-                <div class="col-2 col-sm-3 col-md-1 px-2 crypto-legend" id="crypto-legend"></div>
-                <div id="crypto" class="col-10 col-sm-9 col-md-11 p-0 px-2"></div>
+              <div class="return-group row px-3 mt-3">
+                <div class="col-2 col-sm-2 col-md-1 px-2 legend crypto-legend" id="crypto-legend"></div>
+                <div id="crypto" class="col-10 col-sm-10 col-md-11 p-0 px-2"></div>
               </div>
               <div class="row px-3 justify-content-end">
                 <div id="crypto-averages" class="bottomtable col-11 col-sm-10 col-md-12 p-0 px-2"></div>
