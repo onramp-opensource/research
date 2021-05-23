@@ -3,6 +3,11 @@ const intervalYear = 24 * 3600 * 365 * 1000; // 1 year
 const intervalMonth = 24 * 3600 * 30 * 1000;  // 1 month
 const intervalDay = 24 * 3600 * 1000; // 1 day
 const intervalWeek = 24 * 3600 * 7 * 1000;  // 1 week
+const backgroundColor = {
+	"BTC": "#080809",	"ETH": "#595960",	"BNB": "#66ECFF",	"XRP": "#cfda0f",	"DOT": "#FF6162",	"ADA": "#66ED00",	"UNI": "#00FB7E",
+	"LTC": "#FFC001",	"LINK": "#079A89",	"BCH": "#FF9999",	"THETA": "#49596A",	"XLM": "#EF8889",	"USDC": "#29D9AA",	"FIL": "#cfda0f",
+	"WBTC": "#FF999A",	"BTT": "#66ECFE",	"DOGE": "#EE6162",	"SOL": "#1FC001",	"LUNA": "#1AFCCE",	"EOS": "#AF6161",	"NEO": "#CF6060"}
+
 
 var selectedAsset = [];
 var assetData = [];
@@ -173,51 +178,10 @@ function getReturnData(key) {
 			.style("fill", 
 				function(d) {
 					if (d.value != null) {
-						switch (d.label) {
-							case "BTC":
-								return "#080809";
-							case "ETH":
-								return "#595960";
-							case "BNB":
-								return "#66ECFF";
-							case "XRP":
-								return "#cfda0f";
-							case "DOT":
-								return "#FF6162";
-							case "ADA":
-								return "#66ED00";
-							case "UNI":
-								return "#00FB7E";
-							case "LTC":
-								return "#FFC001";
-							case "LINK":
-								return "#079A89";
-							case "BCH":
-								return "#FF9999";
-							case "THETA":
-								return "#49596A";
-							case "XLM": 
-								return "#EF8889";
-							case "USDC": 
-								return "#29D9AA";
-							case "FIL": 
-								return "#cfda0f";
-							case "WBTC": 
-								return "#FF999A";
-							case "BTT": 
-								return "#66ECFE";
-							case "DOGE": 
-								return "#EE6162";
-							case "SOL": 
-								return "#1FC001";
-							case "LUNA": 
-								return "#1AFCCE";
-							case "EOS": 
-								return "#AF6161";
-							case "NEO": 
-								return "#CF6060";
-							default:
-								return "#cfda0e"; //labels at top
+						if (backgroundColor[d.label]) {
+							return backgroundColor[d.label];
+						} else {
+							return "#cfda0e";
 						}
 					} else {
 						return "white";
@@ -541,11 +505,17 @@ function addCryptoLegend() {
 	setTimeout(()=>{
 	    var ul = document.createElement('ul')
 	    ul.id = "cryptolegend";
-	    ul.className = "list-group mt-4";
+	    ul.className = "list-group";
 	    var childs ="";
 	    for (var i = 0; i < selectedAsset.length; i++) {
-	    	childs += `<li class="tooltip">`+selectedAsset[i].symbol +` 
-	            <span class="top">`+selectedAsset[i].name+`</span>
+				let color;
+				if (backgroundColor[selectedAsset[i].symbol]) {
+					color = backgroundColor[selectedAsset[i].symbol];
+				} else {
+					color = "#cfda0e";
+				}
+	    	childs += `<li class="tooltip" style="background-color: `+ color + `"` +`>`+selectedAsset[i].symbol +` 
+	          <span class="top">`+selectedAsset[i].name+`</span>
 	       	</li>`
 	    }
 	    ul.innerHTML = childs;

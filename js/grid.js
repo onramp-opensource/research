@@ -378,37 +378,37 @@ function addLegend(){
     ul.id = "assetlegend";
     ul.className = "list-group";
     ul.innerHTML= `
-        <li class="tooltip btc-color">1% BTC 
+        <li class="tooltip btc-color" style="background-color: #7AFFBD;">1% BTC 
             <span class="top">59% S&P 500<br>40% Barclays Agg., 1% Bitcoin</span>
        	</li>
-       	<li class="tooltip btc-color">5% BTC
+       	<li class="tooltip btc-color" style="background-color: #00FB7E;">5% BTC
             <span class="top">55% S&P 500<br>40% Barclays Agg., 5% Bitcoin</span>
        	</li>
-       	<li class="tooltip">BTC
+       	<li class="tooltip" style="background-color: #FFC000;">BTC
             <span class="top">Bitcoin Cryptocurrency</span>
        	</li>
-       	<li class="tooltip">Comm.
+       	<li class="tooltip" style="background-color: #FF9999;">Comm.
             <span class="top">Commodities: BCOMTR Index</span>
         </li>
-        <li class="tooltip">S&P 500
+        <li class="tooltip" style="background-color: #080808;">S&P 500
             <span class="top">Standard & Poor 500 Index</span>
         </li>
-        <li class="tooltip">RealEst.
+        <li class="tooltip" style="background-color: #FF6161;">RealEst.
             <span class="top">Real Estate: DJUSRET Index</span>
         </li>
-        <li class="tooltip">60/40
+        <li class="tooltip" style="background-color: #079A88;">60/40
             <span class="top">60% S&P 500<br>40% Barclays Aggregate</span>
         </li>
-        <li class="tooltip">Agg
+        <li class="tooltip" style="background-color: #66ECFF;">Agg
             <span class="top">Barclays Aggregate Index</span>
         </li>
-        <li class="tooltip">HFRX
+        <li class="tooltip" style="background-color: #cfda0e;">HFRX
             <span class="top">HFRXGL Index</span>
         </li>
-        <li class="tooltip">EAFE
+        <li class="tooltip" style="background-color: #595959;">EAFE
             <span class="top">Non-North American developed markets (MSCI EAFE)<br> NDDUEAFE Index</span>
         </li>
-        <li class="tooltip">EEM
+        <li class="tooltip" style="background-color: #D9D9D9;">EEM
             <span class="top">Emerging Markets: NDUEEGF Index</span>
         </li>
     `;
