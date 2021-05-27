@@ -145,7 +145,7 @@
       FROM `history` h INNER JOIN assets a ON h.assetId = a.assetId WHERE h.assetId != 'tether' 
       AND ($cur_time - 13 * 7 * 24 * 60 * 60) < UNIX_TIMESTAMP(`date`) GROUP BY end_date, h.assetId ORDER BY yearmonth ASC, h.price DESC";*/
       $sql = "SELECT h.price, CONCAT(DATE_FORMAT(DATE(h.date + INTERVAL (0 - WEEKDAY(h.date)) DAY), '%m-%d'), '~', DATE_FORMAT(SUBSTRING(h.date, 1, 10), '%m-%d')) AS yearmonth, a.name, a.symbol FROM `history` h INNER JOIN assets a ON h.assetId = a.assetId
-      WHERE h.id IN (SELECT MAX(id) FROM `history` WHERE assetId != 'tether' AND ($cur_time - 13 * 7 * 24 * 60 * 60) < UNIX_TIMESTAMP(`date`) 
+      WHERE h.id IN (SELECT MAX(id) FROM `history` WHERE assetId != 'tether' AND ($cur_time - 12 * 7 * 24 * 60 * 60) < UNIX_TIMESTAMP(`date`) 
       GROUP BY DATE(`date` + INTERVAL (6 - WEEKDAY(`date`)) DAY), assetId ORDER BY SUBSTRING(`date`, 1, 10) ASC, `price` DESC) 
       ORDER BY SUBSTRING(h.date, 1, 10) ASC, h.price DESC";
     }
@@ -153,7 +153,7 @@
     if ($key == 8) {
       // Get the weekly date
       $sql = "SELECT CONCAT(DATE_FORMAT(DATE(h.date + INTERVAL (0 - WEEKDAY(h.date)) DAY), '%m-%d'), '~', DATE_FORMAT(SUBSTRING(h.date, 1, 10), '%m-%d')) AS `week` FROM `history` h
-      WHERE h.id IN (SELECT MAX(id) FROM `history` WHERE assetId != 'tether' AND ($cur_time - 13 * 7 * 24 * 60 * 60) < UNIX_TIMESTAMP(`date`) 
+      WHERE h.id IN (SELECT MAX(id) FROM `history` WHERE assetId != 'tether' AND ($cur_time - 12 * 7 * 24 * 60 * 60) < UNIX_TIMESTAMP(`date`) 
       GROUP BY DATE(`date` + INTERVAL (6 - WEEKDAY(`date`)) DAY) ORDER BY SUBSTRING(`date`, 1, 10) ASC, `price` DESC) 
       ORDER BY SUBSTRING(h.date, 1, 10) ASC, h.price DESC";
     }
