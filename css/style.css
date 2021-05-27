@@ -82,6 +82,7 @@ table td {
   align-items: center;
   flex-direction: column;
   padding: 0px;
+  justify-content: center;
 }
 
 .title {
@@ -93,7 +94,7 @@ table td {
 .tooltip {
   display:inline-block;
   position:relative;
-  border:1px solid #666;
+  /* border:1px solid #666; */
   text-align: center;
   padding:0.5rem;
   opacity: 1;
@@ -101,6 +102,7 @@ table td {
   border-radius: 10px !important;
   width: 100%;
   font-weight: 600;
+  color: #ffffff;
 }
 
 .tooltip .top {
@@ -220,6 +222,13 @@ table td {
   }
   .update-date span {
     font-size: 10px;
+  }
+  #loader {
+    width: 25px !important;
+    height: 25px !important;
+    border: 3px solid #f3f3f3 !important;
+    border-top: 3px solid #3498db !important;
+    margin: 0px !important;
   }
 }
 
