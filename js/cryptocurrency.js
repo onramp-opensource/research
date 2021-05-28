@@ -25,6 +25,7 @@ var dayGroup = [];
 var dailyfirstlastData = [];
 
 var date = new Date();
+var curMonth = new Date(date.getFullYear() + "-" + (date.getMonth()+1) + "-" + "15");
 const END_DATE = date.getTime(); // current Date
 const START_DATE = END_DATE - intervalYear
 
@@ -445,7 +446,7 @@ function getDBData() {
 
 $(document).ready(() => {
 	getDBData();
-	for (let i = END_DATE ; i >= START_DATE; i-= intervalMonth) {
+	for (let i = curMonth.getTime() ; i >= curMonth.getTime()-intervalYear; i-= intervalMonth) {
 		let month = new Date(i).toISOString().slice(0, 7);
 		monthGroup.push(month);
 	}
@@ -490,16 +491,6 @@ $(document).ready(() => {
 		$("#daily").removeClass("btn-active");
 	});
 })
-
-function weekNumberForDate(date) {
-	var janOne = new Date(date.getFullYear(),0,1);
-	var _date = new Date(date.getFullYear(),date.getMonth(),date.getDate());
-	var yearDay = ((_date - janOne + 1) / 86400000);//60 * 60 * 24 * 1000
-	var day = janOne.getUTCDay();
-	if (day<4){yearDay+=day;}
-	var week = Math.ceil(yearDay/7);
-	return week;
-}
 
 function addCryptoLegend() {
 	setTimeout(()=>{
