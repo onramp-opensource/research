@@ -4,6 +4,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
+  <meta name="twitter:image" content="https://research.onrampinvest.com/img/asset-class-returns.png">
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta property="og:title" content="Onramp Research" />
+  <meta property="og:url" content="https://research.onrampinvest.com/#class-returns" />
+  <meta property="og:image" content="https://research.onrampinvest.com/img/asset-class-returns.png" />
+  <meta property="og:description" content="Onramp Invest" />
+  <meta property="og:site_name" content="Onramp Research" />
   <title>Onramp Research</title>
   <link rel='shortcut icon' type='image/png' href='img/onramp.png' />
   <!-- Bootstrap core CSS -->
@@ -89,7 +96,7 @@
               <div class="row px-3 justify-content-end">
                 <div id="averages" class="bottomtable col-11 col-sm-10 col-md-12 p-0 px-2"></div>
               </div>
-              <div class="sharethis-inline-share-buttons mt-2" id="share-class" data-url="https://research.onrampinvest.com/#class-returns" data-title="Cryptocurrency Assets Returns" data-image="https://research.onrampinvest.com/img/asset-class-returns.png"></div>
+              <div class="sharethis-inline-share-buttons mt-2" id="share-class" data-url="https://research.onrampinvest.com/#class-returns" data-title="Assets Returns" data-image="https://research.onrampinvest.com/img/asset-class-returns.png"></div>
             </div>
             <div class="card shadow-sm p-3 mt-4" id="crypto-assets">
               <div id="loader" class="my-5"></div>

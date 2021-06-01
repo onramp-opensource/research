@@ -1,6 +1,7 @@
 <?php
   define("INTERVAL_YEAR", 24 * 3600 * 365 * 1000);
   define("INTERVAL_MONTH", 24 * 3600 *30 * 1000 );
+  define("INTERVAL_DAY", 24 * 3600 * 1000 );
   date_default_timezone_set('UTC');
   $servername = "localhost";
   $database = "crypto";
@@ -99,8 +100,8 @@
 
   function fetchAssetIdHistory($id) {
     $d1 = new Datetime();
-    $currentTime = $d1->format('U') * 1000 + 24 * 3600 * 1000;
-    $firstDate = $currentTime - INTERVAL_YEAR;
+    $currentTime = $d1->format('U') * 1000;
+    $firstDate = $currentTime - INTERVAL_YEAR - INTERVAL_DAY;
     $endDate = $currentTime;
     $url = "https://api.coincap.io/v2/assets/$id/history?interval=d1&start=$firstDate&end=$endDate";
     $crl = curl_init();
@@ -110,7 +111,6 @@
     $response = curl_exec($crl);
     curl_close($crl);
     $rspData = json_decode($response, true);
-    // saveAssetIdHistory($id, $data['data']);
     $data = $rspData['data'];
     for( $i = 0; $i < count($data); $i++) {
       global $conn;
@@ -124,6 +124,7 @@
   function getHistoryData($key) {
     global $conn;
     $history = array();
+    $cur_date = date('Y-m-d');
     $cur_time = time();
     if ($key == 1) {
       $sql = "SELECT h.price, SUBSTRING(h.date, 1, 7) as yearmonth, a.name, a.symbol FROM `history` h INNER JOIN assets a ON h.assetId = a.assetId
@@ -145,7 +146,7 @@
       FROM `history` h INNER JOIN assets a ON h.assetId = a.assetId WHERE h.assetId != 'tether' 
       AND ($cur_time - 13 * 7 * 24 * 60 * 60) < UNIX_TIMESTAMP(`date`) GROUP BY end_date, h.assetId ORDER BY yearmonth ASC, h.price DESC";*/
       $sql = "SELECT h.price, CONCAT(DATE_FORMAT(DATE(h.date + INTERVAL (0 - WEEKDAY(h.date)) DAY), '%m-%d'), '~', DATE_FORMAT(SUBSTRING(h.date, 1, 10), '%m-%d')) AS yearmonth, a.name, a.symbol FROM `history` h INNER JOIN assets a ON h.assetId = a.assetId
-      WHERE h.id IN (SELECT MAX(id) FROM `history` WHERE assetId != 'tether' AND ($cur_time - 12 * 7 * 24 * 60 * 60) < UNIX_TIMESTAMP(`date`) 
+      WHERE h.id IN (SELECT MAX(id) FROM `history` WHERE assetId != 'tether' AND UNIX_TIMESTAMP(DATE_SUB('$cur_date', INTERVAL 12 WEEK)) < UNIX_TIMESTAMP(`date`) 
       GROUP BY DATE(`date` + INTERVAL (6 - WEEKDAY(`date`)) DAY), assetId ORDER BY SUBSTRING(`date`, 1, 10) ASC, `price` DESC) 
       ORDER BY SUBSTRING(h.date, 1, 10) ASC, h.price DESC";
     }
@@ -153,7 +154,7 @@
     if ($key == 8) {
       // Get the weekly date
       $sql = "SELECT CONCAT(DATE_FORMAT(DATE(h.date + INTERVAL (0 - WEEKDAY(h.date)) DAY), '%m-%d'), '~', DATE_FORMAT(SUBSTRING(h.date, 1, 10), '%m-%d')) AS `week` FROM `history` h
-      WHERE h.id IN (SELECT MAX(id) FROM `history` WHERE assetId != 'tether' AND ($cur_time - 12 * 7 * 24 * 60 * 60) < UNIX_TIMESTAMP(`date`) 
+      WHERE h.id IN (SELECT MAX(id) FROM `history` WHERE UNIX_TIMESTAMP(DATE_SUB('$cur_date', INTERVAL 12 WEEK)) < UNIX_TIMESTAMP(`date`) 
       GROUP BY DATE(`date` + INTERVAL (6 - WEEKDAY(`date`)) DAY) ORDER BY SUBSTRING(`date`, 1, 10) ASC, `price` DESC) 
       ORDER BY SUBSTRING(h.date, 1, 10) ASC, h.price DESC";
     }
@@ -177,21 +178,21 @@
     if ($key == 2) {
       $sql = "SELECT a.symbol, c.* FROM assets a INNER JOIN (SELECT h.*, b.lastprice, b.lastdate FROM `history` h 
       INNER JOIN (SELECT id AS lastid, `date` AS lastdate, price AS lastprice, assetId AS lastassetId FROM `history` 
-      WHERE DATE(SUBSTRING(`date`, 1, 10))=(STR_TO_DATE('$cur_date', '%Y-%m-%d') - 1)) b ON h.assetId = b.lastassetId 
+      WHERE DATE(SUBSTRING(`date`, 1, 10))=(DATE_SUB('$cur_date', INTERVAL 1 DAY))) b ON h.assetId = b.lastassetId 
       GROUP BY b.lastassetId) c ON a.assetId = c.assetId ORDER BY c.lastprice DESC LIMIT 10";
     }
     if ($key == 5) {
       $sql = "SELECT a.symbol, c.lastassetId, c.price, c.lastprice FROM assets a INNER JOIN (SELECT * FROM (SELECT * FROM `history` 
       WHERE assetId != 'tether' AND ($cur_time - 13 * 24 * 60 * 60) <= UNIX_TIMESTAMP(`date`)) a 
       INNER JOIN(SELECT id AS lastid, `date` AS lastdate, price AS lastprice, assetId AS lastassetId FROM `history` 
-      WHERE DATE(SUBSTRING(`date`, 1, 10))=(STR_TO_DATE('$cur_date', '%Y-%m-%d') - 1)) b ON a.assetId = b.lastassetId 
+      WHERE DATE(SUBSTRING(`date`, 1, 10))=(DATE_SUB('$cur_date', INTERVAL 1 DAY))) b ON a.assetId = b.lastassetId 
       GROUP BY b.lastassetId) c ON a.assetId = c.assetId ORDER BY c.lastprice DESC LIMIT 10";
     }
     if ($key == 7) {
       $sql = "SELECT a.symbol, c.lastassetId, c.price, c.lastprice FROM assets a INNER JOIN (SELECT * FROM (SELECT * FROM `history` 
-      WHERE assetId != 'tether' AND ($cur_time - 12 * 7 * 24 * 60 * 60) <= UNIX_TIMESTAMP(`date`)) a 
+      WHERE assetId != 'tether' AND UNIX_TIMESTAMP(DATE_SUB('$cur_date', INTERVAL 12 WEEK)) <= UNIX_TIMESTAMP(`date`)) a 
       INNER JOIN(SELECT id AS lastid, `date` AS lastdate, price AS lastprice, assetId AS lastassetId FROM `history` 
-      WHERE DATE(SUBSTRING(`date`, 1, 10))=(STR_TO_DATE('$cur_date', '%Y-%m-%d') - 1)) b ON a.assetId = b.lastassetId 
+      WHERE DATE(SUBSTRING(`date`, 1, 10))=(DATE_SUB('$cur_date', INTERVAL 1 DAY))) b ON a.assetId = b.lastassetId 
       GROUP BY b.lastassetId) c ON a.assetId = c.assetId ORDER BY c.lastprice DESC LIMIT 10";
     }
     $result = mysqli_query($conn, $sql);
@@ -202,10 +203,7 @@
       }
       echo json_encode($data);
     } else {
-      // echo "0 results";
-      truncateTable();
-      saveAssetData();
-      fetchAssetHistory();
+      echo "0 results";
     }
   }
 
@@ -226,8 +224,7 @@
     $update_date = getUpdateDate();
     if ($update_date) {
       if ($cur_time - strtotime($update_date) > 60 * 60 * 4) {
-        dropTable();
-        createTable();
+        truncateTable();
         saveAssetData();
         fetchAssetHistory();
       }
