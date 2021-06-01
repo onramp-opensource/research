@@ -25,7 +25,6 @@ var dayGroup = [];
 var dailyfirstlastData = [];
 
 var date = new Date();
-var curMonth = new Date(date.getFullYear() + "-" + (date.getMonth()+1) + "-" + "15");
 const END_DATE = date.getTime(); // current Date
 const START_DATE = END_DATE - intervalYear
 
@@ -53,7 +52,6 @@ function getRegularData(key) {
 	if(selectedAsset.length > 0) {
 		selectedAsset = [];
 	}
-	
 	for (var i = 0; i < groupLabel.length; i++) {
 		var item = [];
 		var count = 1;
@@ -365,6 +363,7 @@ function getDBData() {
 					$("#loader").css("display", "none");
 					$(".update-date").removeClass('hidden');
 					$("#update-date").text(update_date);
+					getMonthData(update_date);
 				}
 			};
 
@@ -446,12 +445,6 @@ function getDBData() {
 
 $(document).ready(() => {
 	getDBData();
-	for (let i = curMonth.getTime() ; i >= curMonth.getTime()-intervalYear; i-= intervalMonth) {
-		let month = new Date(i).toISOString().slice(0, 7);
-		monthGroup.push(month);
-	}
-	monthGroup.reverse();
-
 	for (let i = END_DATE - intervalDay; i >= END_DATE - 13 * intervalDay; i-=intervalDay) {
 		let date = new Date(i).toISOString().slice(0, 10);
 		dayGroup.push(date);
@@ -491,6 +484,27 @@ $(document).ready(() => {
 		$("#daily").removeClass("btn-active");
 	});
 })
+
+function getMonthData(end_date) {
+	var dates = [];
+	var end = new Date(new Date(end_date).getTime() - intervalDay);
+	var start = new Date(end.getTime() - intervalYear);
+	for (var i = start.getFullYear(); i < end.getFullYear() + 1; i++) {
+    for (var j = 1; j <= 12; j++) {
+      if (i === end.getFullYear() && j > end.getMonth() + 1) {
+        break;
+      } else if (i === start.getFullYear() && j <= start.getMonth()){
+        continue;
+      } else if (j < 10) {
+        var dateString = [i, '-', '0' + j].join('');
+        monthGroup.push(dateString)
+      } else {
+        var dateString = [i, '-', j].join('');
+        monthGroup.push(dateString);
+      }
+    }
+	}
+}
 
 function addCryptoLegend() {
 	setTimeout(()=>{
