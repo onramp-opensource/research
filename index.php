@@ -28,13 +28,13 @@
 <body oncontextmenu="return false">
   <header>
     <div class="custom-bg collapse" id="navbarHeader">
+    <a href="https://github.com/bfcdev/onramp-opensource-research"><img loading="lazy" width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_left_white_ffffff.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
+
       <div class="container">
         <div class="row">
           <div class="col-sm-8 col-md-7 py-4">
             <h4 class="text-white">Onramp Research</h4>
-	    <p class="text-white">Interactive research tools and data from the Onramp Team.
-		Fork <a href='https://github.com/bfcdev/onramp-opensource-research'>here</a>
-		</p>
+	    <p class="text-white">Interactive research tools and data from the Onramp Team. </p>
 	  </div>
           <div class="col-sm-4 offset-md-1 py-4">
             <h4 class="text-white">Contact</h4>
