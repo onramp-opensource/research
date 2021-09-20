@@ -71,7 +71,7 @@
             illustration purposes we created two different portfolios, one with a 1% allocation to bitcoin and one with
             a 5% allocation. Both pull those allocations from the 60% stock allocation.
           </p>
-          <p class="lead text-muted">This is an open source project. The source code is available on <a href="https://github.com/bfcdev/onramp-opensource-research">GitHub</a>
+          <p class="lead text-muted">This is an open source project. The source code is available on <a href="https://github.com/bfcdev/onramp-opensource-research">GitHub</a>.
           </p>
         </div>
       </div>
