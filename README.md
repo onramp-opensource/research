@@ -1,13 +1,12 @@
-# onramp-research
-Onramp repo for research tools and interactive data visualizations
+# onramp-opensource-research
 
-The current site can be found on 
-https://research.onrampinvest.com
+This is an open source project for research tools and interactive data visualizations.
 
-The plan is to create a more extensive library of tools and resources similar to those found in our 
-Onramp Advisor's Guide to the Cryptocurrency Markets
-https://blockforce.docsend.com/view/vdppdpwknfsxuj9e
+The current site can be found at https://research.onrampinvest.com.
 
-Important to note that this code for the "quilt" or grid.js and crypto.js was somewhat "hacked" together by old interns.  We will be refactoring the code to make it more readable going forward.  
+Important: this is an experimental project. Collaborators are welcome!
 
-Many of the tools from the https://www.realitysharesadvisors.com/tools/dividend-dashboard/ will be refactored and modified to the crypto markets.  The code for those tools is available. Ask Eric.
+The goal is to create a more extensive library of tools and resources similar to those found in our 
+Onramp Advisor's Guide to the Cryptocurrency Markets. This is available at https://blockforce.docsend.com/view/vdppdpwknfsxuj9e.
+
+In addition, many of the tools available at https://www.realitysharesadvisors.com/tools/dividend-dashboard/ can be modified for crypto markets and incorporated as well.
