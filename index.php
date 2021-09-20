@@ -32,9 +32,10 @@
         <div class="row">
           <div class="col-sm-8 col-md-7 py-4">
             <h4 class="text-white">Onramp Research</h4>
-            <p class="text-white">Interactive research tools and data from the Onramp Team.</p>
-	    <p>Fork <a href='https://github.com/bfcdev/onramp-opensource-research'>here</a></p>
-          </div>
+	    <p class="text-white">Interactive research tools and data from the Onramp Team.
+		Fork <a href='https://github.com/bfcdev/onramp-opensource-research'>here</a>
+		</p>
+	  </div>
           <div class="col-sm-4 offset-md-1 py-4">
             <h4 class="text-white">Contact</h4>
             <ul class="list-unstyled">
