@@ -4,9 +4,10 @@
   define("INTERVAL_DAY", 24 * 3600 * 1000 );
   date_default_timezone_set('UTC');
   $servername = "localhost";
-  $database = "crypto";
-  $username = "root";
-  $password = "onramp1!";
+  # don't forget to change your database credentials to reflect that of yours
+  $database = "";
+  $username = "";
+  $password = "!";
   // Create connection
   $conn = mysqli_connect($servername, $username, $password, $database);
   // Check connection
