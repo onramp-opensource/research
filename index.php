@@ -28,7 +28,7 @@
 <body oncontextmenu="return false">
   <header>
     <div class="custom-bg collapse" id="navbarHeader">
-    <a href="https://github.com/bfcdev/onramp-opensource-research"><img loading="lazy" width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_left_white_ffffff.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
+    <a href="https://github.com/onramp-opensource/research.git"><img loading="lazy" width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_left_white_ffffff.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
 
       <div class="container">
         <div class="row">
@@ -71,7 +71,7 @@
             illustration purposes we created two different portfolios, one with a 1% allocation to bitcoin and one with
             a 5% allocation. Both pull those allocations from the 60% stock allocation.
           </p>
-          <p class="lead text-muted">This is an open source project. The source code is available on <a href="https://github.com/bfcdev/onramp-opensource-research">GitHub</a>.
+          <p class="lead text-muted">This is an open source project. The source code is available on <a href="https://github.com/onramp-opensource/research.git">GitHub</a>.
           </p>
         </div>
       </div>
