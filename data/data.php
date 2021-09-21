@@ -8,12 +8,17 @@
   $database = "";
   $username = "";
   $password = "!";
+  
+  # Add your API key from CoinCap
+  $COINCAP_API_KEY = '';
+  
   // Create connection
   $conn = mysqli_connect($servername, $username, $password, $database);
   // Check connection
   if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
   }
+  mysqli_query($conn, "set session sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'");
 
   // If database is not exist create one
   if (!mysqli_select_db($conn,$database)){
@@ -72,6 +77,7 @@
     curl_setopt($crl, CURLOPT_URL, $url);
     curl_setopt($crl, CURLOPT_FRESH_CONNECT, true);
     curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($crl, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $COINCAP_API_KEY));
     $response = curl_exec($crl);
     curl_close($crl);
     $data = json_decode($response, true);
